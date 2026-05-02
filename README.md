@@ -49,7 +49,7 @@ The approach was sharpened through the AI 4 Agile course by Stephan Wolpers, whi
 
 ## Who This Is For
 
-- Agile coaches and Scrum Masters who want to do more with the data their teams already produce
+- Agile coaches who want to do more with the data their teams already produce
 - Practitioners curious about AI-assisted facilitation who want a grounded starting point, not hype
 - Hiring managers evaluating whether a candidate actually uses these tools or just talks about them
 
@@ -61,5 +61,5 @@ Active and evolving. Tools are added as they are built and validated in practice
 
 ---
 
-*Built by [Your Name] — Scrum Master, Agile Coach, and relentless practitioner.*
-*[LinkedIn](https://linkedin.com/in/yourprofile) | [Email](mailto:you@email.com)*
+*Built by Eliza Fabricius — Agile Coach, Project Manager, Product Owner, and relentless practitioner.*
+*[LinkedIn](https://linkedin.com/in/elizafabricius)*
