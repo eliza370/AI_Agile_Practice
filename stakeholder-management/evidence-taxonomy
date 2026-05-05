@@ -1,0 +1,108 @@
+# Evidence Taxonomy Reference
+ 
+Used by the status-report skill to classify and label claims appropriately.
+Read this file when you need guidance on whether a claim is supportable,
+how to label it, or how to handle conflicting signals.
+ 
+---
+ 
+## The four evidence types
+ 
+### Direct
+**Definition**: The fact is explicitly stated in the input. No interpretation required.
+ 
+**Examples**:
+- "We deployed the payment module to production on Thursday" → Direct completion
+- "The API vendor has not responded in 10 days" → Direct blocker
+- "The release date has moved from 15 June to 30 June" → Direct scope change
+- "We closed 24 of 30 tickets this sprint" → Direct metric
+**When to use it**: For completions, named blockers, confirmed dates, stated metrics.
+**Label in report**: Only label [Direct] when it adds clarity — e.g. when contrasting
+with Inferred claims in the same section.
+ 
+---
+ 
+### Inferred
+**Definition**: The claim is a reasonable interpretation of what the input implies,
+but not explicitly stated. A careful reader would agree with the inference.
+ 
+**Examples**:
+- Notes describe "ongoing discussion about scope" across three updates → Inferred scope risk
+- Input mentions team is "stretched thin" alongside a missed milestone → Inferred capacity concern
+- Multiple tickets described as "nearly done" for two consecutive periods → Inferred stagnation risk
+- Tone of input is notably more cautious than prior updates → Inferred confidence decline
+**When to use it**: For risk interpretations, progress claims not explicitly stated,
+patterns across multiple signals.
+**Label in report**: Use [Inferred] when the claim is material and the user might
+not have made the connection explicitly.
+ 
+**Inferred claims must be falsifiable**: If you cannot describe what input would
+contradict the inference, it is probably Speculative, not Inferred.
+ 
+---
+ 
+### Estimated
+**Definition**: A quantitative or time-based claim derived from partial data.
+No hard number was given — the estimate is constructed from context clues.
+ 
+**Examples**:
+- Three of five milestones described as complete → ~60% complete [Estimated]
+- Notes describe "most of the work done" on a feature → Estimated 70–80% [Estimated]
+- Blocker raised two weeks ago with no resolution noted → Estimated 14+ days unresolved [Estimated]
+**When to use it**: For completion percentages, time durations, or scope fractions
+that were not explicitly stated.
+**Label in report**: Always label [Estimated] when using a number you derived,
+not one the user provided. Never present an estimated figure as if it were Direct.
+ 
+**Anti-overclaiming rule**: Never estimate a percentage without at least two
+data points. A single "nearly done" comment does not support a percentage.
+ 
+---
+ 
+### Speculative
+**Definition**: A concern or possibility that could be real given the context,
+but is not supported by the input. Gut-level or pattern-based.
+ 
+**Examples**:
+- A dependency on an external vendor with no update in the notes → possible risk, but not evidenced
+- Team described as in a "crunch period" → possible morale or retention risk, but not stated
+- An aggressive delivery timeline with no risk mentioned → possible overconfidence, but not confirmed
+**When to use it**: Only in Section 6 (Confidence and Gaps), or explicitly labelled as
+a hypothetical concern in Section 3 when the risk is significant enough to name.
+ 
+**Never use Speculative claims in**:
+- Section 1 (Overall Status) — status must be grounded in Direct or Inferred evidence
+- Section 2 (Progress) — progress claims must be Direct or Estimated
+- Section 3 as the primary item — Speculative risks must be clearly labelled or moved to Section 6
+---
+ 
+## Conflicting signals
+ 
+When inputs contain conflicting signals (e.g. some tickets closed, others blocked;
+progress reported but timeline slipped), do not resolve the conflict artificially.
+ 
+**Handling approach**:
+1. Report both signals accurately
+2. Flag the conflict explicitly in Section 6
+3. Choose the more conservative status anchor (e.g. AT RISK over ON TRACK)
+4. Do not average conflicting signals into a false middle position
+**Example**:
+Input says "feature A shipped" but also "feature A is still in QA testing"
+→ Do not say "Feature A is nearly complete." Say: "Conflicting signals on Feature A status
+— inputs indicate both deployment and ongoing QA. Status unclear until confirmed."
+ 
+---
+ 
+## Evidence quality rating (for Signal Quality header)
+ 
+Use one of these ratings in the Signal Quality header at the top of each report:
+ 
+| Rating | Description |
+|---|---|
+| **Strong** | Multiple Direct signals, clear baseline, consistent inputs |
+| **Moderate** | Mix of Direct and Inferred; some gaps but enough to assess status |
+| **Weak** | Mostly Inferred or Estimated; thin inputs; significant gaps |
+| **Insufficient** | Not enough to produce a reliable report — flag and ask for more |
+ 
+A Weak rating does not block report generation, but it must be stated clearly
+and Section 6 must be substantive.
