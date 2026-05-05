@@ -1,0 +1,99 @@
+# Audience Tiers Reference
+
+Used by the status-report skill to calibrate language, length, and framing
+to the appropriate stakeholder audience.
+
+---
+
+## Tier 1 — Executive / Sponsor
+
+**Who**: C-suite, VP, sponsor, steering committee, programme board  
+**What they need**: The headline, the status, the risk that matters, and what they need to decide or unblock  
+**What they do not need**: Ticket-level detail, methodology terminology, internal team dynamics
+
+**Calibration**:
+- Section 1 (Overall Status): 2–4 sentences maximum, lead with the most important fact
+- Section 2 (Progress): 3–5 bullet points, material completions only, no minor updates
+- Section 3 (Risks): Focus on delivery risk, budget risk, or stakeholder-visible risk only
+- Section 5 (Next Steps): Be explicit about what you are asking from them
+- Total report length: Aim for one readable page. Never more than two.
+
+**Language patterns**:
+- "The release remains on schedule for [date]" not "Sprint 14 velocity was 32 points"
+- "A vendor dependency is now the primary risk to delivery" not "the Jira epic is blocked"
+- "We are asking the steering committee to approve..." not "the team needs a decision on..."
+
+**Avoid**:
+- Sprint, velocity, backlog, story points, epics, ceremonies, retrospective
+- Internal team names unless they are also known to the audience
+- Percentage completions unless they are delivery-milestone percentages
+
+---
+
+## Tier 2 — Delivery Board / Programme / Delivery Manager
+
+**Who**: Programme manager, delivery manager, PMO, release manager, senior agile coach  
+**What they need**: Milestone status, dependency health, risk register items, cross-team issues  
+**What they do not need**: Team-internal dynamics, individual ticket status, team ceremonies
+
+**Calibration**:
+- Section 1: 3–5 sentences with milestone or phase reference
+- Section 2: More granular — workstream-level progress is appropriate
+- Section 3: Include dependencies and cross-team risks explicitly
+- Section 6: Be explicit about what information you do not have
+- Total report length: One to two pages acceptable
+
+**Language patterns**:
+- "Phase 2 milestones are on track; Phase 3 dependencies are at risk" 
+- "The data migration workstream is blocked pending infrastructure sign-off"
+- "Two items from the RAID log require escalation before the next programme board"
+
+**Scrum language**: Acceptable at Tier 2 if the context is clearly Scrum-based.
+Do not use it if the programme contains non-Scrum teams.
+
+---
+
+## Tier 3 — Client / External Stakeholder
+
+**Who**: Client sponsor, external partner, customer advisory contact  
+**What they need**: Clear plain-English summary, honest assessment of delivery health,
+no surprises, and appropriate handling of sensitive internal information
+
+**Calibration**:
+- Section 1: Plain language only. No internal acronyms. No methodology terminology.
+- Section 2: Frame progress in terms of outcomes and delivered value, not internal tasks
+- Section 3: Focus on items that affect the client's plan, timeline, or decisions
+- Section 5: Be clear and direct about what you need from the client
+- Section 6: Be honest about uncertainty without undermining confidence inappropriately
+- Total report length: One page if possible. Two maximum.
+
+**Language patterns**:
+- "The integration testing phase is complete" not "Sprint 11 testing stories are done"
+- "We are currently waiting on confirmation of the data schema from your team"
+- "We anticipate [outcome] by [date], subject to confirmation of [dependency]"
+
+**Sensitive handling**:
+- Do not include internal team conflict signals in a client-facing report
+- Do not include unconfirmed internal concerns that would alarm without actionable context
+- Do not include capacity or resourcing details unless directly relevant to the client's timeline
+- Do include honest risk statements — softening risks to the point of hiding them is worse
+
+---
+
+## Audience not specified
+
+If the user has not indicated an audience, default to **Tier 1** (executive/sponsor)
+and state the assumption in the Signal Quality header:
+
+"Audience not specified — defaulting to executive/sponsor register.
+If this is intended for a delivery board or programme audience, note that and
+a more detailed version can be produced."
+
+---
+
+## Mixed audiences
+
+Some reports go to a mixed room. In this case:
+- Write the body at Tier 1 (executive) register
+- Allow Section 3 and Section 5 to go slightly deeper (Tier 2 level)
+- Avoid all Tier 3 (client-specific) filtering unless explicitly asked
