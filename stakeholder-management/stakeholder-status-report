@@ -1,0 +1,238 @@
+---
+name: status-report
+description: >
+  Turns messy delivery updates, project notes, and team signals into a clear,
+  structured stakeholder status report. Use this skill whenever a user has raw
+  status information from a team, project, initiative, or release and needs a
+  clean stakeholder update — regardless of methodology. Trigger on: "write a
+  status report", "turn this into an update", "draft a stakeholder update",
+  "summarize project status", "help me write an update for [audience]", "I
+  need to send a status to [exec/client/board]", "here are my project notes",
+  "can you make sense of this for stakeholders", or any time a user pastes
+  delivery notes, sprint summaries, milestone updates, RAID items, or blockers
+  and needs them shaped into a readable report. Works across Scrum, Agile,
+  project management, programme delivery, and hybrid contexts.
+---
+ 
+# Status Report Skill
+ 
+Produces structured, honest stakeholder status reports from messy delivery inputs.
+Adapts to agile, project, programme, and product contexts. Avoids false precision,
+glossed-over risks, and generic update language.
+ 
+---
+ 
+## Step 0 — Check input adequacy before proceeding
+ 
+Before generating anything, assess what the user has provided.
+ 
+**Minimum viable input**: at least one signal about current state of work —
+what is in flight, what is done, what is stuck, or what is changing.
+ 
+If the input is too thin to support even a partial report (e.g. a single
+sentence with no delivery content), ask for:
+- A brief description of what is happening on the project or initiative
+- Any known issues, blockers, or risks
+- The intended audience if known
+Do not generate a report from no meaningful input. An honest "I need more
+to work with" is better than a padded report.
+ 
+---
+ 
+## Step 1 — Parse and classify the inputs
+ 
+Read the full input and mentally sort signals into these buckets.
+Do not ask the user to label them — infer from content.
+ 
+```
+SIGNAL BUCKETS
+──────────────────────────────────────────────────
+Context frame
+  Project / initiative / team name
+  Audience (exec, client, delivery board, programme, team lead)
+  Reporting period or cadence
+  Milestone, release, or deadline
+ 
+Current state signals
+  Work in flight, completed, or stuck
+  Completion or progress indicators
+  Scope or timeline shifts
+  Team or capacity signals
+ 
+Risk and issue signals
+  Blockers — things actively stopping progress
+  Risks — things that could stop progress
+  Dependencies — external inputs the team is waiting on
+  Assumptions — things being treated as true but not confirmed
+  Escalations or stakeholder concerns
+ 
+Prior state signals
+  Previous status or commitments
+  Known outstanding items from last update
+ 
+Metrics (treat as optional enrichment, never required)
+  Throughput, burn, completion %, milestone dates
+```
+ 
+**Classify each material signal** using the evidence taxonomy:
+ 
+| Type | Meaning |
+|---|---|
+| **Direct** | Explicitly stated — a ticket closed, a blocker named, a date confirmed |
+| **Inferred** | Reasonably implied — language suggests delay, tone suggests concern |
+| **Estimated** | Derived from partial data — ~60% implied by context, not stated |
+| **Speculative** | Possible but unsupported — noted only in Section 6 or flagged explicitly |
+ 
+---
+ 
+## Step 2 — Determine audience tier and context type
+ 
+**Audience tier** (default to Tier 1 if not stated):
+- **Tier 1 (Executive / Sponsor)** — headline-first, 3–5 sentences per section, strategic framing
+- **Tier 2 (Delivery board / Programme)** — more detail, milestone and dependency focus
+- **Tier 3 (Client / External)** — plain language, no internal jargon, positive but honest
+**Context type** (infer from input, do not require labelling):
+- Scrum / Sprint — use sprint language only if input uses it
+- Project / Waterfall — milestone and phase language
+- Programme / Multi-team — dependency and risk-register language
+- Product / Continuous delivery — outcome and flow language
+- Hybrid — blend language to match the input
+State your audience and context assumption in the Signal Quality header at the top of the report so the user can correct it.
+ 
+---
+ 
+## Step 3 — Determine status anchor
+ 
+Choose one of four top-level status signals. Apply the most conservative one supported by the evidence:
+ 
+| Status | When to use |
+|---|---|
+| **ON TRACK** | Clear forward progress, no material risks, delivery looks achievable |
+| **AT RISK** | Progress continuing but meaningful risk to timeline, scope, or quality exists |
+| **OFF TRACK** | Progress stalled, deadline already missed, or blocker with no clear resolution |
+| **UNKNOWN** | Input is too thin to assess delivery health — say so explicitly |
+ 
+**Anti-gaming rule**: Do not use ON TRACK when a significant blocker or risk is present just because work is also progressing. Choose AT RISK. When in doubt, be conservative.
+ 
+---
+ 
+## Step 4 — Generate the report
+ 
+Use exactly this six-section format. Do not add sections or reorder them.
+Do not omit sections — use a short honest statement if a section has no content.
+ 
+```
+## Delivery Status Report
+[Project/Initiative name if known] | [Date: use today's date] | [Audience tier]
+ 
+─── Signal Quality ───────────────────────────────────────────────────────────
+[One or two sentences on what input was available and what this means for
+confidence. E.g.: "Based on team notes and a partial RAID log. No prior
+status provided — this report reflects current state only, not a delta."]
+ 
+## 1. Overall Status
+[Status anchor: ON TRACK / AT RISK / OFF TRACK / UNKNOWN]
+ 
+[2–4 sentences: the most important headline for stakeholders. What is the
+current situation? What is the single most important thing to know?]
+ 
+## 2. Progress Since Last Update
+[If no prior state provided, open with: "No baseline provided — reporting
+current state, not a delta from prior update."]
+ 
+[Each meaningful item as a short bullet. Tag evidence type in brackets
+where it matters: [Direct], [Inferred], [Estimated].]
+[If there is nothing to report: "No material progress signals in available inputs."]
+ 
+## 3. Risks, Blockers, and Dependencies
+[For each material item, use this format:]
+ 
+**[Item name]** · [Blocker / Risk / Dependency / Assumption]
+- Why it matters: [plain language, stakeholder impact]
+- Current impact: [what it is doing or could do to delivery]
+- Confidence: [High / Medium / Low] — [what the confidence refers to: is
+  the risk real? Is the impact estimate reliable? Is the timeline certain?]
+ 
+[If nothing material: "No material risks or blockers identified in available inputs."]
+ 
+[Order: Blockers first (active), then Risks (potential), then Dependencies,
+then Assumptions. Do not bury critical items.]
+ 
+## 4. Changes and Emerging Concerns
+[Scope shifts, timeline changes, priority resets, stakeholder expectation moves,
+team or capacity changes, early signals of drift.]
+[If nothing: "No notable changes reported in this period."]
+ 
+## 5. Next Steps and Recommended Actions
+[What happens next — with role type if available, never individual names]
+[Any decisions or support required from stakeholders — explicit asks only,
+not implied hopes]
+[If inputs do not support next steps: "Next steps unclear from available inputs.
+Consider requesting a team update to clarify priorities."]
+ 
+## 6. Confidence and Gaps
+[What is uncertain, missing, weakly evidenced, or still being validated]
+[What would change the status assessment if confirmed]
+[Speculative risks or concerns go here, not in Section 3]
+[If inputs were strong and complete: "No significant gaps identified."]
+```
+ 
+---
+ 
+## Step 5 — Apply these rules before finalising
+ 
+### Anti-patterns to reject
+ 
+**False precision**
+Do not assign completion percentages unless a number or clear fraction is in the input.
+Do not state timelines as confident when they are Inferred or Estimated.
+Do not say "on track to deliver by [date]" unless a date was provided and no blockers exist.
+ 
+**Section inflation**
+Do not pad sections. A one-sentence section is better than a padded one.
+Do not invent risks to fill Section 3. Do not manufacture next steps.
+ 
+**Glossed-over risks**
+Do not lead a risk description with positive framing before burying the concern.
+Do not soften a Blocker to sound like a minor inconvenience.
+Name critical risks clearly. If something could cause a missed deadline, say so.
+ 
+**Scrum bleed**
+Do not use sprint, velocity, backlog, story point, or ceremony language unless
+the input uses it and the context is clearly a Scrum team.
+ 
+**Jargon carry-through**
+Translate internal abbreviations into plain language for stakeholders.
+If an abbreviation cannot be safely translated, note it as unclear.
+ 
+**Individual attribution**
+Never attribute risk, delay, or concern to a named person.
+Use role or function only: "the development team", "the data provider", "the vendor".
+ 
+**Prior state hallucination**
+If no prior update was provided, never invent what was promised or completed
+in a previous period. Acknowledge the absence.
+ 
+---
+ 
+## Tone guide
+ 
+Target register: **calm, direct, stakeholder-appropriate**.
+ 
+- Lead with the situation, not reassurance
+- Name problems before describing mitigations
+- Use short, declarative sentences for critical items
+- Avoid: "We're pleased to report...", "Despite challenges...", "The team continues to work hard..."
+- Acceptable hedge: "Based on available information..." or "Subject to confirmation..."
+- Never close with an unconditional positive when the status is AT RISK or OFF TRACK
+---
+ 
+## Reference files
+ 
+Read these when needed:
+ 
+- `references/evidence-taxonomy.md` — Full evidence classification rules and worked examples
+- `references/raid-handling.md` — How to classify and surface RAID items in Section 3
+- `references/audience-tiers.md` — Detailed guidance on Tier 1 / 2 / 3 language calibration
+- `examples/` — High-signal and low-signal example inputs and outputs
+ 
