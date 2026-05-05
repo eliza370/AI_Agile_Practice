@@ -1,0 +1,159 @@
+# Example A — High-Signal Input (AT RISK)
+
+This example shows a moderately detailed input with clear blockers and a
+realistic mix of Direct and Inferred evidence.
+
+---
+
+## INPUT
+
+```
+Project: Horizon Platform Migration
+Context: Q3 release — target go-live 31 July. Exec sponsor gets weekly update.
+
+Update notes (week ending 14 June):
+
+Completed this week:
+- Data migration scripts for Phase 1 (customer records) signed off and ready for UAT
+- Infra provisioning in staging env complete
+- Security review for auth module passed
+
+In progress:
+- UAT for Phase 1 underway — 3 of 9 test scenarios complete, no defects yet
+- Phase 2 (transaction history) still in development — team says "on track" but
+  no milestone dates confirmed
+- Performance testing not yet started — was supposed to begin this week
+
+Blockers / risks:
+- Vendor has not delivered the legacy data extract. Contract says 20 May.
+  We've chased twice. No confirmed delivery date. This is on the critical path.
+- Performance environment is shared with another project and has been unavailable
+  for 3 of the last 5 days. Testing cannot begin until resolved.
+- UAT sign-off requires client team lead who is on leave until 28 June.
+  We don't know if a delegate has been named.
+
+Dependencies:
+- Client sign-off on data schema (outstanding from last week, now overdue by 5 days)
+- Legal team approval of data retention policy — requested 3 weeks ago, no response
+
+Metrics:
+- 18 of 45 total tasks complete (40%)
+- 2 items moved from "done" back to "in progress" after QA found issues
+
+Other:
+- Team lead flagged that if vendor extract is not received by 20 June,
+  the 31 July go-live is not achievable without scope change
+```
+
+---
+
+## OUTPUT
+
+```
+## Delivery Status Report
+Horizon Platform Migration | 14 June | Executive / Sponsor (Tier 1)
+
+─── Signal Quality ───────────────────────────────────────────────────────────
+Moderate-to-strong. Multiple direct signals across completions, blockers, and
+metrics. No prior status provided — reporting current state, not a delta.
+Phase 2 progress is Inferred; vendor situation is confirmed but resolution
+timeline is unknown.
+
+## 1. Overall Status
+AT RISK
+
+Phase 1 work is progressing, but two active blockers — an overdue vendor
+delivery and a shared performance environment — are currently preventing
+critical path activities from starting. If the vendor extract is not received
+by 20 June, the 31 July go-live is not achievable without a scope change.
+Stakeholder decisions on UAT delegation and the data schema are also overdue.
+
+## 2. Progress Since Last Update
+No baseline provided — reporting current state only.
+
+- Data migration scripts for Phase 1 signed off and ready for UAT [Direct]
+- Infrastructure provisioning in the staging environment is complete [Direct]
+- Security review for the authentication module has passed [Direct]
+- UAT underway: 3 of 9 test scenarios complete with no defects found so far [Direct]
+- Overall task completion at approximately 40% (18 of 45 tasks) [Direct]
+- Note: 2 tasks moved back from complete to in-progress following QA — this
+  reduces the effective completion rate [Direct]
+
+## 3. Risks, Blockers, and Dependencies
+
+**Vendor legacy data extract — overdue 25 days** · Blocker
+- Why it matters: The extract is on the critical path for Phase 2 development
+  and testing. Without it, Phase 2 cannot complete.
+- Current impact: Phase 2 is blocked. If not resolved by 20 June, go-live on
+  31 July is not achievable without reducing scope.
+- Confidence: High — the vendor obligation and critical path position are confirmed.
+  Resolution timeline is unknown.
+
+**Performance environment unavailable** · Blocker
+- Why it matters: Performance testing cannot begin until the environment is stable.
+  This was already delayed from its planned start date.
+- Current impact: Testing is blocked. Every day of delay compresses the window
+  before go-live.
+- Confidence: High — the issue is confirmed. Resolution depends on coordination
+  with another project.
+
+**UAT sign-off — client team lead unavailable** · Dependency
+- Why it matters: UAT cannot be formally closed without the sign-off authority.
+  Client team lead is on leave until 28 June.
+- Current impact: UAT can continue but cannot close. If no delegate is named,
+  sign-off may not happen until late June, reducing time for defect resolution.
+- Confidence: Medium — the leave is confirmed; whether a delegate exists is unknown.
+
+**Client data schema sign-off** · Dependency
+- Why it matters: Development and testing depend on a confirmed data schema.
+- Current impact: Overdue by 5 days. If this slips further it will affect
+  downstream testing.
+- Confidence: High that it is overdue; impact timeline is Medium confidence.
+
+**Legal data retention approval** · Dependency
+- Why it matters: Required before go-live. Requested 3 weeks ago with no response.
+- Current impact: Not yet on critical path but becoming urgent given the timeline.
+- Confidence: Medium — the delay is confirmed; whether this will gate go-live
+  is not yet known.
+
+## 4. Changes and Emerging Concerns
+
+Performance testing has slipped from its planned start date this week due to
+the shared environment issue. This is a new delay not previously flagged.
+
+Two tasks returned to in-progress after QA, indicating some rework in the
+delivery flow. [Inferred] This may reflect normal QA activity or an early
+signal of quality risk — it is worth monitoring.
+
+Phase 2 progress has been described as "on track" by the team but no
+confirmed milestone dates exist. Stakeholder confidence in Phase 2 timing
+should be treated as Estimated, not confirmed.
+
+## 5. Next Steps and Recommended Actions
+
+- **Vendor escalation required**: The delivery team should escalate the
+  overdue extract to contract/commercial owners immediately. Sponsor support
+  may be needed if the vendor relationship requires executive intervention.
+- **Client UAT delegate**: The client sponsor should confirm whether a UAT
+  delegate has been named for the period of the team lead's leave.
+- **Data schema sign-off**: Client sponsor to chase the outstanding schema
+  confirmation — now 5 days overdue.
+- **Performance environment**: The delivery team is coordinating resolution.
+  An update on timeline is expected by end of next week.
+- **Go-live decision point**: If the vendor extract is not confirmed by 20 June,
+  a scope or timeline decision will be needed. The sponsor should be prepared
+  to make this call.
+
+## 6. Confidence and Gaps
+
+- Phase 2 progress has no confirmed milestone dates. The "on track" assessment
+  from the team is unverified. [Inferred — treat with caution]
+- Legal approval timeline is unknown. If this becomes a gate item, it could
+  affect go-live independently of the vendor situation.
+- It is not known whether the performance environment issue has an agreed
+  resolution owner or timeline.
+- UAT defect profile is very early (3 of 9 scenarios). Current clean status
+  may not hold as more complex scenarios are tested. [Speculative]
+- The 40% task completion figure includes 2 items returned to in-progress.
+  The actual effective completion rate should be confirmed with the team.
+```
