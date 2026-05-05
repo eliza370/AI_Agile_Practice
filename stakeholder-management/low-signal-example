@@ -1,0 +1,131 @@
+# Example B — Low-Signal Input (UNKNOWN → AT RISK)
+
+This example shows thin, informal input with no baseline and minimal structure.
+The skill must produce a useful report without fabricating missing information,
+and must be honest about what it cannot assess.
+
+---
+
+## INPUT
+
+```
+can you help me write a status update for the leadership team
+
+we've been working on the data warehouse project for about 6 weeks now
+things are mostly going ok but we had some issues this week
+the new ingestion pipeline is done i think, the team was testing it
+but there's a blocker with the cloud permissions that's been going on for a while
+we're supposed to demo something to the client next month
+not sure if we'll be ready honestly
+the team is a bit stretched, we had someone leave last week
+```
+
+---
+
+## OUTPUT
+
+```
+## Delivery Status Report
+Data Warehouse Project | [Today's date] | Executive / Leadership (Tier 1)
+
+─── Signal Quality ───────────────────────────────────────────────────────────
+Weak. Input is informal and brief. No milestone dates, no task breakdown,
+no prior update provided. Most signals are Inferred or Estimated. This report
+reflects a best-effort summary — key details should be confirmed with the team
+before sending to leadership.
+
+## 1. Overall Status
+AT RISK
+
+The project is approximately six weeks in with a client demo expected next month.
+The delivery team has flagged honest uncertainty about readiness, a persistent
+cloud permissions blocker, and a recent team capacity reduction. These factors
+together suggest the project is at risk of not being ready for the demo,
+though the severity cannot be assessed without more information.
+
+## 2. Progress Since Last Update
+No baseline provided — reporting current state only.
+
+- The data ingestion pipeline has been completed and is currently in testing [Inferred — "done I think" suggests near-completion, not confirmed]
+- The project is approximately 6 weeks into delivery [Direct]
+- A cloud permissions issue has been active for some period — duration unclear [Inferred]
+
+## 3. Risks, Blockers, and Dependencies
+
+**Cloud permissions blocker** · Blocker
+- Why it matters: An unresolved permissions issue is preventing work. The
+  duration suggests it has not been straightforward to resolve.
+- Current impact: Unclear from available information, but it is described as
+  ongoing. Could be affecting pipeline testing or environment access.
+- Confidence: Medium — the blocker exists, but its scope and impact on the
+  demo timeline are not clear from the input.
+
+**Team capacity reduction** · Risk
+- Why it matters: A team member left last week. In a delivery period ahead
+  of a client demo, capacity loss increases delivery risk.
+- Current impact: The team is described as "stretched." Work may slow or
+  quality may be affected. [Inferred]
+- Confidence: Medium — the departure is confirmed; the impact on pace and
+  quality is Inferred.
+
+**Client demo readiness** · Risk
+- Why it matters: There is an expected client demo next month. The delivery
+  team has expressed honest uncertainty about whether they will be ready.
+- Current impact: No confirmed demo scope or readiness criteria are available.
+  Uncertainty is stated directly by the team.
+- Confidence: Low — this is based on a subjective readiness concern, not an
+  objective assessment.
+
+## 4. Changes and Emerging Concerns
+
+A team member left last week, reducing capacity during a critical pre-demo
+period. This is a new development that may affect delivery pace.
+
+The team's own uncertainty about demo readiness — stated directly — is the
+most significant signal in this update. Teams typically understate delivery
+concerns in status updates; a direct expression of uncertainty warrants attention.
+
+## 5. Next Steps and Recommended Actions
+
+- **Clarify demo scope and readiness criteria**: What needs to be working for
+  the demo to succeed? This should be confirmed with the team and the client.
+- **Resolve permissions blocker**: Establish who owns this and what resolution
+  looks like. If it requires external support or escalation, that decision
+  should happen this week.
+- **Assess capacity impact**: With the recent departure, confirm whether the
+  remaining team can deliver the demo scope. If not, a scope or timeline
+  conversation with the client may be needed before next month.
+- **Get a clearer team update**: This report is based on limited information.
+  A brief team check-in to confirm pipeline status, blocker impact, and
+  demo readiness would significantly improve confidence before leadership is briefed.
+
+## 6. Confidence and Gaps
+
+This report has low-to-medium confidence overall due to thin input.
+
+The following are unknown and material:
+- Demo date and confirmed scope for the demo
+- Whether the ingestion pipeline testing has passed or is still in progress
+- What the cloud permissions blocker is actually preventing
+- Whether a replacement or additional resource is planned following the departure
+- What "mostly going ok" means — what has gone well, what has not
+
+The overall status is assessed as AT RISK based on the combination of a
+persistent blocker, capacity loss, and stated team uncertainty. If any of
+these factors are better than they appear in the input, the status could
+be revised to ON TRACK with more information.
+```
+
+---
+
+## Notes on this example
+
+This example demonstrates:
+
+1. **Signal Quality rating of Weak** — stated clearly, not buried
+2. **Evidence type labelling** — "done I think" correctly classified as Inferred
+3. **UNKNOWN avoided** — even with thin input, enough signals exist to anchor at AT RISK
+4. **No fabricated prior state** — "no baseline provided" stated in Section 2
+5. **Honest uncertainty in Section 1** — the concern is named in the headline summary
+6. **Section 5 recommends getting better information** — the skill acknowledges its own limits
+7. **Section 6 lists what is actually missing** — not generic uncertainty, but specific gaps
