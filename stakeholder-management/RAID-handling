@@ -1,0 +1,113 @@
+# RAID Item Handling Reference
+ 
+Used by the status-report skill to classify, prioritise, and surface RAID items
+in Section 3 (Risks, Blockers, and Dependencies).
+ 
+---
+ 
+## What RAID stands for
+ 
+**R** — Risks: Things that could negatively affect delivery if they materialise  
+**A** — Assumptions: Things being treated as true that have not been confirmed  
+**I** — Issues: Problems that have already materialised and are actively impacting delivery  
+**D** — Dependencies: External inputs, decisions, or outputs the team is waiting on
+ 
+For stakeholder reporting, Issues are the most urgent (they are already happening),
+Blockers sit within Issues, and Risks are the next priority. Assumptions and
+Dependencies matter when they are close to being violated or unresolved.
+ 
+---
+ 
+## Classification rules
+ 
+### Blockers (subset of Issues)
+A Blocker is a current Issue that is actively preventing work from progressing.
+ 
+**Classify as Blocker when**:
+- Work cannot proceed until it is resolved
+- The blockage is stated explicitly ("we cannot continue until...")
+- A dependency is overdue and is now causing a stoppage
+**Report as**: `**[Name]** · Blocker`
+ 
+### Risks
+Something that could affect delivery but has not materialised yet.
+ 
+**Classify as Risk when**:
+- The input expresses concern about something that might happen
+- A pattern or signal suggests a likely future problem
+- An assumption looks fragile
+**Do not classify as Risk when**:
+- The problem is already happening (that's an Issue or Blocker)
+- There is no evidence at all for it (that's Speculative — goes in Section 6)
+**Report as**: `**[Name]** · Risk`
+ 
+### Dependencies
+External inputs the team is waiting on that, if delayed or absent, will affect delivery.
+ 
+**Classify as Dependency when**:
+- The team is waiting for an output, decision, or resource from outside the team
+- The timing of the dependency matters to delivery
+**Prioritise dependencies that**:
+- Have no clear owner or timeline
+- Are already overdue
+- Are on the critical path
+**Report as**: `**[Name]** · Dependency`
+ 
+### Assumptions
+Things being treated as true but not confirmed.
+ 
+**Classify as Assumption when**:
+- The input implies something is expected to hold but has not been validated
+- A plan depends on something that has not been agreed
+**Surface Assumptions in Section 3 only when**:
+- The assumption is material to the current delivery status
+- It is close to being tested or violated
+- The confidence in it is medium or low
+**Report as**: `**[Name]** · Assumption`
+ 
+---
+ 
+## Ordering rules for Section 3
+ 
+List items in this order:
+ 
+1. **Blockers** — active, already causing impact
+2. **Issues** (non-blocking) — happening but not fully stopping work
+3. **High-impact Risks** — likely and consequential
+4. **Dependencies** — overdue or near-critical first
+5. **Lower-impact Risks** — possible but less likely or less consequential
+6. **Assumptions** — material ones only
+**Anti-burial rule**: The most critical item must appear first. Do not bury
+a release-blocking issue behind three medium risks because risks were listed first.
+Override the default order when a lower-tier item has higher impact.
+ 
+---
+ 
+## Confidence level guidance for Section 3 items
+ 
+The confidence level on each item should state what the confidence refers to:
+ 
+| Confidence | What it means |
+|---|---|
+| **High** | We are confident this is real, the impact is clear, and the timeline is understood |
+| **Medium** | The item is likely real but impact or timeline is uncertain |
+| **Low** | The item may exist but evidence is thin, or we cannot assess impact yet |
+ 
+**Always specify what the confidence refers to**:
+- "Confidence: High — this blocker is confirmed and the critical path impact is clear"
+- "Confidence: Medium — the risk is real but severity depends on vendor response this week"
+- "Confidence: Low — signals suggest this may be an issue but it has not been confirmed"
+Do not leave confidence as a bare label. One phrase of context is always better.
+ 
+---
+ 
+## RAID items that should NOT appear in Section 3
+ 
+These belong in Section 6 (Confidence and Gaps) instead:
+ 
+- Speculative risks with no evidential basis
+- Concerns the user flagged as "might be worth watching"
+- Items already resolved or mitigated with no residual risk
+- Risks that are very low probability and low impact
+If a user includes a resolved item in their notes, acknowledge it in Section 2
+(Progress) as a resolved issue, not in Section 3.
