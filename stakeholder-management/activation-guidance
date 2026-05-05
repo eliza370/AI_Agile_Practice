@@ -1,0 +1,89 @@
+# Status Report Skill — Activation Guidance
+ 
+## What this skill does
+ 
+Turns messy delivery inputs into structured, honest stakeholder status reports.
+Works across agile, project, programme, product, and hybrid contexts.
+Adapts language to the input context and audience.
+ 
+## When to use it
+ 
+Use this skill when you have raw or semi-structured information about a team,
+project, initiative, or release and need a clear stakeholder update.
+ 
+**Typical trigger phrases**:
+- "Write a status report from these notes"
+- "Turn this into a stakeholder update"
+- "Draft a status update for [exec/client/board/leadership]"
+- "Here are my project notes — can you make a status report?"
+- "I need to send an update on [project/initiative]"
+- "Summarise project status for the sponsor"
+- "Help me write a weekly update"
+- "Here's the sprint summary and our blockers — can you format this?"
+**Also use it when**:
+- A user pastes team notes, meeting outputs, or a mix of delivery signals
+- A user has a RAID log and needs it surfaced for stakeholders
+- A user needs a client-facing version of an internal update
+- A user is preparing for a programme board and needs a clean brief
+## When NOT to use it
+ 
+- When the user wants a retrospective analysis or lessons-learned document
+  → Use the retro-analysis skill
+- When the user wants a workshop synthesis
+  → Use the workshop-analysis skill
+- When the user wants a backlog refinement transcript analysed
+  → Use the appropriate refinement skill
+- When the user wants a sprint retrospective diagnostic
+  → Use the retro-analysis skill
+## What the skill produces
+ 
+A six-section structured report:
+1. Overall Status (with ON TRACK / AT RISK / OFF TRACK / UNKNOWN anchor)
+2. Progress Since Last Update
+3. Risks, Blockers, and Dependencies (with per-item confidence ratings)
+4. Changes and Emerging Concerns
+5. Next Steps and Recommended Actions
+6. Confidence and Gaps
+Plus a Signal Quality header that declares input quality and audience assumption.
+ 
+## Deployment note for Claude Projects
+ 
+Project instructions should contain only a brief activation statement.
+All skill logic lives in the SKILL.md and reference files.
+ 
+**Suggested Project instruction**:
+```
+When the user asks for a status report, stakeholder update, or delivery summary,
+use the status-report skill. Read SKILL.md before generating any output.
+```
+ 
+Do not duplicate skill logic in the Project instruction.
+ 
+## File structure
+ 
+```
+status-report/
+├── SKILL.md                          ← Core skill logic (read first)
+├── references/
+│   ├── evidence-taxonomy.md          ← Evidence classification rules
+│   ├── raid-handling.md              ← How to surface RAID items
+│   └── audience-tiers.md            ← Language calibration by audience
+└── examples/
+    ├── example-a-high-signal.md      ← AT RISK, strong input
+    └── example-b-low-signal.md      ← AT RISK from thin input, honest gaps
+```
+ 
+## Design principles (for skill maintainers)
+ 
+This skill was built with the following explicit constraints:
+ 
+- **Evidence taxonomy over confident assertion** — every material claim is
+  classified as Direct, Inferred, Estimated, or Speculative
+- **Conservative status anchoring** — when in doubt, go more cautious
+- **Anti-overclaiming** — no percentages without numbers, no timelines without dates,
+  no progress without evidence
+- **Honesty over polish** — gaps and weak evidence are surfaced, not smoothed
+- **No individual attribution** — roles only, never names
+- **No Scrum bleed** — sprint language only when the input supports it
+- **Lean project instructions** — skill logic stays in files, not in Project setup
+ 
