@@ -1,0 +1,86 @@
+# Action Item Follow-Through Matching
+
+Logic for matching action items across sessions and assessing follow-through status.
+
+---
+
+## The Core Challenge
+
+Action items rarely appear verbatim across retros. The same underlying commitment may be expressed differently, partially resolved, renamed, or silently dropped. This file defines how to handle each case.
+
+---
+
+## Matching Logic
+
+### Step 1: Extract candidate action items per session
+
+For each session, collect items that appear in:
+- An "Actions", "Next steps", "Commitments", or equivalent frame
+- Any frame with explicit ownership language ("Owner:", "[Name] will", "Action:")
+- Implicit commitments in improvement frames that use active future-tense language ("We will...", "Starting next sprint...")
+
+Label each:
+- **Explicit**: Appears in a dedicated action frame or has ownership language
+- **Implicit**: Future-tense commitment language without formal action structure
+
+---
+
+### Step 2: Attempt cross-session matching
+
+For each action from session N, check sessions N+1, N+2, ... for:
+
+| Match type | Criteria | How to handle |
+|------------|----------|---------------|
+| **Exact match** | Near-identical wording in an action frame | Mark as: Reappearing (if still in actions frame) or Resolved (if appears in positive frame with completion language) |
+| **Semantic match** | Same underlying intent, different wording | Mark as: Probable match — state both versions, note the interpretation |
+| **Partial resolution** | A related action appears but narrower in scope | Mark as: Partially addressed — note what remains open |
+| **Disappears** | Action is absent from all subsequent sessions | Mark as: Absent-ambiguous — do not assume resolved |
+| **Resolved with evidence** | Positive sticky or facilitator note confirms completion | Mark as: Resolved |
+| **Reappears as pain point** | The same topic appears in the negative frame in a later session | Mark as: Stalled or Regressed |
+
+---
+
+### Step 3: Absence ≠ Resolution
+
+This is the most important false-assumption to guard against.
+
+An action item that stops appearing does not mean it was completed. It may mean:
+- It was forgotten
+- The owner left the team
+- It was quietly deprioritised
+- The facilitator stopped tracking it
+- The team lost faith that it would be done
+
+**Only mark as Resolved if there is positive evidence:** a sticky confirming completion, the pain point disappearing alongside a corresponding positive signal, or facilitator commentary.
+
+**When absent without evidence:** mark as `Absent-ambiguous` and flag in the coach note.
+
+---
+
+### Step 4: Follow-Through Health Rating
+
+At the end of M3, calculate:
+
+- **Strong**: 70%+ of tracked actions have resolution signal; named owners on 60%+ of actions
+- **Adequate**: 40–69% resolution signal; some ownership gaps
+- **Weak**: Under 40% resolution signal OR persistent unowned actions across multiple sessions
+- **Broken**: Actions routinely generated and routinely dropped; no visible follow-up mechanism; same actions reappear across 3+ sessions
+
+---
+
+## Common Tricky Cases
+
+**Action reassigned to a different owner in a later session**
+Count as in-progress, not resolved. Note the handoff. Flag if the original owner left the team.
+
+**Action split into sub-tasks in a later session**
+Count as in-progress. Note the decomposition as a positive signal (team engaged with the work) but do not mark as resolved until sub-tasks complete.
+
+**Action appears in a different team's retro data (if multi-team inputs are mixed)**
+This skill is single-team only. If cross-team content is present, note it in S7/M6 ambiguity section and exclude it from follow-through tracking.
+
+**Action item is clearly impossible (e.g. "fix the legacy system")**
+Flag as: Unresolvable as stated — no owner could meaningfully complete this. Coach should help the team reformulate.
+
+**Retro has no previous session to compare against**
+For the first session in a multi-session dataset, no follow-through analysis is possible. Note this clearly. Begin tracking from session 2 onward.
