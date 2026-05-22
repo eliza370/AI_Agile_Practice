@@ -1,0 +1,103 @@
+# Format Detection Reference
+
+Extended frame-name mapping, CUSTOM format handling, and edge cases for retro-analysis.
+
+---
+
+## Known Format Mappings
+
+### Start / Stop / Continue (SSC)
+
+Accepted frame name variants:
+- Start, Stop, Continue
+- Start doing, Stop doing, Keep doing
+- Do more, Do less, Keep
+- More of, Less of, Same
+- Begin, Stop, Continue
+
+Semantic mapping:
+- Start / Do more / Begin → improvement opportunities, new ideas
+- Stop / Do less → pain points, friction, things harming the team
+- Continue / Keep / Same → what's working
+
+---
+
+### What Went Well / What Didn't / Actions (WWW)
+
+Accepted frame name variants:
+- What went well, What didn't go well, Actions
+- Went well, Improve / Delta / Change, Actions / Next steps
+- Positives, Negatives, Improvements
+- + / Δ / → (symbol-only frames)
+- Good, Bad, Ugly (rare but real)
+
+Semantic mapping:
+- What went well / Positives → what's working
+- What didn't / Improve / Delta → pain points
+- Actions / Next steps / Improvements → commitments
+
+Note: When frames use symbols only (+ / Δ), treat as WWW and flag as CUSTOM for output labelling.
+
+---
+
+### 4Ls (Liked / Learned / Lacked / Longed for)
+
+Accepted frame name variants:
+- Liked, Learned, Lacked, Longed for
+- Liked, Learned, Lacked, Wished
+- Loved, Learned, Lacked, Longed
+
+Semantic mapping:
+- Liked → what's working, morale signals
+- Learned → insights, process discoveries
+- Lacked → pain points, missing resources or clarity
+- Longed for → aspirations, systemic gaps, sometimes escalation fodder
+
+Note: Lacked and Longed for often together reveal the delta between team capability and team need. When both are rich, they frequently surface systemic impediment candidates.
+
+---
+
+### Mad / Sad / Glad (MSG)
+
+Accepted frame name variants:
+- Mad, Sad, Glad
+- Frustrated, Disappointed, Happy
+- Angry, Concerned, Positive
+- 😠 😢 😊 (emoji-only frames)
+
+Semantic mapping:
+- Mad / Frustrated / Angry → high-friction pain points; often higher-severity signal than equivalent SSC stickies
+- Sad / Disappointed / Concerned → moderate friction, unmet expectations, erosion signals
+- Glad / Happy / Positive → what's working
+
+Caution: MSG formats tend to produce more emotionally charged language. Do not soften or normalise this. Report the register as-is. The emotional intensity is data.
+
+---
+
+## CUSTOM Format Handling
+
+When frame names do not match any known format:
+
+**Step 1: Attempt semantic mapping**
+If the frame name is interpretable (e.g. "Things slowing us down", "What surprised us", "Elephants in the room"), map it to the nearest semantic category and note the mapping explicitly:
+> Frame "Elephants in the room" interpreted as: pain points / unspoken friction. Mapping is inferred — coach should confirm.
+
+**Step 2: If semantic mapping fails, treat as unstructured**
+If frame names are opaque (e.g. "Blue", "Group 1", no names at all), treat the entire board as unstructured. Apply the generic evidence model: look for repetition, clustering, and explicit language rather than relying on frame semantics.
+
+**Step 3: Flag clearly**
+Always note CUSTOM in the format detection header. Note which frames were successfully mapped and which were not.
+
+---
+
+## Edge Cases
+
+**Hybrid boards:** Some teams use SSC for one section and add a freeform "Other" or "Parking lot" frame. Treat the structured frames with the relevant format logic and treat the freeform frame as unstructured content. Do not discard it — parking lot content often contains the most significant impediments.
+
+**Duplicate frames:** Some exports contain the same frame name twice (facilitator error, split-screen boards). Merge content from both frames under that category and note the duplication.
+
+**Unlabelled stickies outside frames:** Common in Miro exports where stickies were placed on the canvas rather than inside a frame. Treat as LOW signal unless content is clearly part of a theme. Note their presence in S7 / M6 ambiguity section.
+
+**Empty frames:** A frame with a heading but no stickies may indicate a topic the team avoided or ran out of time for. Flag as a potential avoidance signal in coaching observations if the empty frame is a negative-feedback category (e.g. empty "What didn't go well" alongside rich positive frames).
+
+**Screenshot-derived or OCR input:** If input quality is degraded (truncated words, garbled text, unclear frame boundaries), note this in Signal Quality and apply conservative evidence standards. Do not reconstruct what stickies "probably" said.
