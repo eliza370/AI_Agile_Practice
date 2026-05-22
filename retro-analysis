@@ -1,0 +1,762 @@
+--
+name: retro-analysis
+description: >
+  Analyzes Agile retrospective data from Miro or Mural boards for Scrum Masters
+  and Agile Coaches. Two modes: (1) single-session — structured coaching brief
+  anchored to delivery risk and team health; (2) multi-session — synthesizes 3–12
+  retros to surface recurring pain points, unresolved actions, systemic impediments,
+  sentiment trajectory, and improvement experiments. Output is coach-grade and
+  candid. Trigger on: "analyze this retro", "what patterns are emerging across
+  retros", "what keeps coming up", "are we improving", "what actions never got
+  resolved", "review our last N retros", "what should I bring to the next retro",
+  "build an escalation summary", "retrospective health check", or any paste of
+  Miro/Mural sticky note exports or retro board content. Use this skill — not
+  workshop-analysis — for all retrospective data.
+---
+ 
+# Retro Analysis Skill
+ 
+Analyzes Agile retrospective data from Miro or Mural board exports.
+Produces coach-grade outputs for Scrum Masters and Agile Coaches.
+Anchored to delivery risk and team health — not to general sentiment.
+ 
+---
+ 
+## SCOPE
+ 
+**Use for:** Single or multi-session retrospective analysis. Sticky note exports,
+frame text, CSV, or manually pasted retro notes from Miro or Mural.
+ 
+**Do not use for:** Designing future retros. General workshop analysis (use
+workshop-analysis skill). Cross-team or portfolio analysis. Fewer than 1 session.
+ 
+---
+ 
+## STEP 1 — MODE DETECTION
+ 
+Determine mode silently before doing anything else.
+ 
+- **Single-session**: One session present, or user has not indicated more will follow.
+- **Multi-session**: Multiple sessions with clear separators (headers, dates, sprint
+  labels). Requires 3–12 sessions. Fewer than 3 → run individual single-session
+  analyses and state why multi-session synthesis is not possible.
+- **Incremental**: User adds sessions one at a time → analyze each in single-session
+  mode, note connections to prior sessions in this conversation, remind user that
+  full multi-session synthesis requires all sessions together.
+- **Ambiguous boundaries**: Sessions appear merged without separators → stop and
+  ask user to confirm or separate before proceeding. Do not guess.
+If mode is ambiguous after checking: default to single-session, state assumption.
+ 
+---
+ 
+## STEP 2 — INPUT CLASSIFICATION AND FORMAT DETECTION
+ 
+### Input quality issues to resolve before analysis
+ 
+- **Unreadable stickies** (OCR errors, garbled text): mark [UNREADABLE], exclude,
+  note count. Do not reconstruct probable content.
+- **Contentless stickies** (".", "??", "idk", standalone emojis): exclude, do not
+  count toward evidence thresholds. If >25% are contentless, downgrade Signal
+  Quality one level.
+- **Duplicate stickies**: count as one signal with repetition note ("appears 3×").
+  Do not count duplicates as independent evidence.
+- **Non-retro content mixed in** (planning notes, announcements, links): exclude,
+  note at top of output: "Non-retro content detected and excluded."
+- **Possibly inauthentic input** (uniform voice, implausibly neat, all one polarity):
+  note in Signal Quality header. Treat all findings as LOW confidence.
+### Retro format detection
+ 
+Map frame/column names to the first matching format:
+ 
+| Frame language | Format |
+|----------------|--------|
+| Start / Stop / Continue (variants: Keep, Do more / Do less) | SSC |
+| What went well / What didn't / Actions (variants: +/Δ/→, Went well / Improve) | WWW |
+| Liked / Learned / Lacked / Longed for (variants: Loved / Wished) | 4Ls |
+| Mad / Sad / Glad (variants: Frustrated / Concerned / Happy) | MSG |
+| No match | CUSTOM |
+ 
+**CUSTOM**: Treat each frame as a named bucket. Do not force-fit. If frame names
+are opaque ("Group 1", unlabelled), treat the board as fully unstructured.
+ 
+For multi-session input: detect format per session independently. A format change
+across sessions is a coaching signal — note it in Dataset Overview.
+ 
+Full variant mapping and edge cases: `references/format-detection.md`
+ 
+---
+ 
+## STEP 3 — SIGNAL QUALITY RATING
+ 
+Assign before writing any output. State in output header. For multi-session,
+rate each session, then assign one overall dataset rating.
+ 
+| Rating | Criteria |
+|--------|----------|
+| **HIGH** | Frame names present AND 15+ stickies AND at least one of: named owners, numerical vote counts, facilitator notes with dates |
+| **MEDIUM** | Frame names OR 2+ structurally distinct groupings AND 8–14 stickies AND session purpose inferrable from content |
+| **LOW** | No frame names AND fewer than 8 stickies OR no grouping signal — but 3+ readable stickies |
+| **VERY LOW** | Fewer than 3 readable stickies, or unstructured block with no sticky-level granularity, or purpose entirely unclear |
+ 
+**"Structurally distinct grouping"** means separation is created by the board
+structure (frame, column, label) — not by content similarity inferred by the
+analyst.
+ 
+**VERY LOW action**: Produce output header + Session Snapshot only. State in one
+sentence what is missing. Do not produce Pain Points, Actions, or Coaching sections.
+ 
+**LOW action**: Produce full template. Mark every finding Estimated or lower.
+Omit Coaching Observations. State at top: "Signal quality is LOW. All findings
+are Estimated confidence at best. Verify before acting."
+ 
+---
+ 
+## STEP 4 — EVIDENCE TAXONOMY
+ 
+Every non-trivial claim must be labelled with its evidence type. These four types
+also define the four output layers — never mix layers within a section.
+ 
+| Type | Definition | Minimum to use | Output layer |
+|------|------------|----------------|--------------|
+| **Direct** | Explicitly stated. Quotable. No interpretation required. | 1 unambiguous sticky | Evidence sections |
+| **Inferred** | Strongly implied by 2+ signals pointing the same direction. | 2+ stickies, or 1 sticky + frame context | Pattern sections |
+| **Estimated** | Plausible reading with 1 partial signal. Could mean something else. | 1 signal — always Low confidence | Themes only |
+| **Speculative** | Possible but unsupported. Tone-reading, gut feeling. | — | T6 Hypotheses only, explicitly labelled |
+ 
+### Hard rules — enforced at Step 5 audit gate
+ 
+- A pain point requires 1 Direct or 2 Inferred signals. One sticky in the correct
+  frame is Estimated, not Inferred.
+- An owner requires a name or role in the input. Never infer from topic or seniority.
+- A decision requires Direct or Inferred basis — frame placement alone is not enough.
+- Contradictory stickies are never merged into one finding. Both become a
+  Contradictions entry.
+- Absence of a topic in a later session = Absent-ambiguous. Never = Resolved.
+- Friction is attributed to processes, systems, or handoffs — never to named individuals.
+- Emotional state is not inferred from word choice alone. "This is killing us" is a
+  frustration signal, not a crisis finding. Corroboration required to elevate it.
+- Board aesthetics (layout, color, density, completeness) are not evidence of
+  engagement or psychological state. Do not interpret them.
+- Coaching Observations require Inferred or Direct basis. Not Estimated alone.
+- Recommendations must cite the Evidence or Inference finding they rest on.
+---
+ 
+## STEP 5 — PRE-OUTPUT AUDIT GATE
+ 
+Run before writing any output. This is a gate — if a check fails, fix the
+finding before proceeding. Do not note the failure and continue.
+ 
+- [ ] Every pain point meets the 1 Direct / 2 Inferred minimum. Demote or drop others.
+- [ ] Every owner is named in the input. Change any inferred owners to "unassigned."
+- [ ] Every theme name is drawn from input language, not imposed categories.
+- [ ] No contradictory stickies merged. Both sides appear as a Contradictions entry.
+- [ ] No absence called resolution.
+- [ ] No friction attributed to a named individual.
+- [ ] No board aesthetic used as evidence.
+- [ ] No Speculative claim outside T6.
+- [ ] No coaching observation rests solely on Estimated evidence.
+If >30% of pain points must be dropped or demoted, downgrade Signal Quality
+one level and restate in the output header.
+ 
+---
+ 
+## STEP 6 — PSYCHOLOGICALLY SENSITIVE THEMES
+ 
+Flag a theme as sensitive if stickies contain: interpersonal conflict or named
+friction between people; burnout or fear language ("I'm done", "completely burnt
+out", "I'm dreading"); criticism of named leaders or stakeholders; safety concerns
+(psychological or physical); references to discrimination, exclusion, or harassment;
+expressions of hopelessness ("nothing ever changes", "I'm looking for a new job").
+ 
+### Handling rules
+ 
+- In **T1/T2** (coach only): paraphrase, never quote verbatim. Mark [SENSITIVE].
+  Keep separate from process pain points — do not cluster with them.
+- In **Coaching Observations**: name the signal (paraphrased), which frame it
+  appeared in, and what the coach should do before the next session. Recommended
+  actions: 1:1 before next retro / private check-in / HR escalation if safety or
+  harassment present / retro design change. Do not recommend raising individual
+  sensitive content in a group setting.
+- In **T3 (Leadership)**: include only if there is direct delivery risk or a
+  systemic safety concern requiring leadership action. Frame in system/process
+  language only. Never identify the individual author. Individual burnout signals
+  go in the Coach Sensitivity Note only — not in the shareable body.
+- In **T4 (Team)**: exclude all sensitive content.
+- Do not treat one burnout-adjacent sticky as team-wide crisis. 1 sticky =
+  Estimated. 3+ across frames = Inferred.
+- Do not silently omit sensitive stickies. Either include with care or note omission.
+---
+ 
+## STEP 7 — CONTRADICTORY AND LOW-QUALITY INPUT
+ 
+### Three contradiction types
+ 
+**Type 1 — Opposing views in one session**
+"Standups are great" and "Standups are a waste of time" in the same retro.
+→ Create a Contradictions and Tensions entry. State both signals with source
+frames. One sentence on what the tension may indicate. Do not resolve.
+ 
+**Type 2 — Topic resolved then regresses across sessions**
+"Deploy pipeline fixed" in S3, "deploy pipeline broken again" in S5.
+→ Flag as Regression in T2. Note the timeline explicitly. Do not average into
+"recurring issue" — they are distinct events.
+ 
+**Type 3 — Input appears inauthentic**
+Uniform voice throughout, all one polarity, implausibly neat, scripted.
+→ State in Signal Quality header what is anomalous. Mark all findings LOW
+confidence. Do not refuse to analyze, but do not treat as representative.
+ 
+### Low-quality input handling
+ 
+| Problem | Action |
+|---------|--------|
+| OCR / truncated text | Minor (1–2 words): infer if unambiguous. Heavy: mark [UNREADABLE], exclude, note count. |
+| Contentless stickies (".", "idk") | Exclude. Don't count toward thresholds. >25% contentless → downgrade Signal Quality. |
+| Duplicate stickies | Count as 1 signal with repetition note. Not independent evidence. |
+| Non-retro content mixed in | Exclude. State at top of output. |
+ 
+---
+ 
+## STEP 8 — SINGLE-SESSION ANALYSIS WORKFLOW
+ 
+Run WF-S1 through WF-S8 silently. Then write output using **Template T1**.
+ 
+**WF-S1** Classify input — format, sticky count, structural signals. Assign Signal Quality.
+ 
+**WF-S2** Detect retro format — SSC / WWW / 4Ls / MSG / CUSTOM. Note hybrid or ambiguous frames.
+ 
+**WF-S3** Normalize stickies — for each: raw text (preserve wording), source frame,
+semantic category (Pain / Positive / Action / Neutral), polarity, priority signal
+(vote count or none), owner signal (named or none), specificity (names a system /
+process / event = specific; general direction = vague). Do not paraphrase yet.
+ 
+**WF-S4** Cluster — group by: (1) identical or near-identical language; (2) same named
+system, process, or event; (3) same causal chain; (4) same frame + semantic proximity
+(Estimated only). Never cluster across polarity. Never force isolated stickies into clusters.
+ 
+**WF-S5** Identify themes — elevate clusters with: 3+ stickies OR vote prioritization
+OR prominent frame placement with no counter-signal. Name from input vocabulary.
+Flag cross-frame themes (higher confidence). Flag contradictions — do not resolve them.
+ 
+**WF-S6** Extract pain points and positives — classify each theme. Apply evidence
+labels. Assign delivery risk (Direct / Indirect / Unclear). Do not artificially balance.
+ 
+**WF-S7** Evidence audit gate — run Step 5 checks. Fix failures before continuing.
+ 
+**WF-S8** Extract actions — collect Explicit (action frame + ownership language) and
+Implicit (future-tense in non-action frames). For each: specific enough to track?
+owner named? within team's control?
+ 
+---
+ 
+## STEP 9 — MULTI-SESSION ANALYSIS WORKFLOW
+ 
+Apply WF-S1–WF-S8 to each session independently first.
+Then run the cross-session steps below. Write output using **Template T2**.
+ 
+### Before starting: dataset minimum requirements
+ 
+- At least 3 sessions present. If fewer, produce individual T1 reports and state why.
+- At least 2 sessions rated MEDIUM or higher. If majority are LOW/VERY LOW, limit
+  output to recurring pain point identification only — no trend analysis.
+- Sessions span at least 2 distinct time points. One retro exported in segments
+  is not multi-session data.
+### What is claimable by session count
+ 
+| Sessions | Claimable | Not claimable |
+|----------|-----------|---------------|
+| 3–4 | Recurring themes, action follow-through | Trend direction |
+| 5–7 | Trend direction at Low-Medium confidence, pattern identification | Entrenched anti-pattern rating |
+| 8–12 | Full trend analysis, Entrenched classification, Medium-High confidence trajectory claims | — |
+ 
+When count limits claims, state this in Dataset Overview. Do not produce
+low-confidence trend claims without explicit caveat.
+ 
+### Session quality weighting
+ 
+- HIGH and MEDIUM: count fully.
+- LOW: count as 0.5 toward persistence counts.
+- VERY LOW: exclude from pattern analysis, note exclusion.
+- When a HIGH session contradicts a pattern from lower-quality sessions, the
+  HIGH session takes precedence. Note the contradiction.
+**WF-M1** Establish session order — if undated or unnumbered, state assumption in
+output header and ask user to confirm before acting on trend or follow-through sections.
+ 
+**WF-M2** Map recurring pain points — fuzzy matching across sessions
+(`references/follow-through-matching.md`). Count with quality weighting. Assess
+trajectory (needs 3+ sessions for directional claim). Absence ≠ resolution.
+ 
+**WF-M3** Track action follow-through — trace each action from WF-S8 across sessions.
+Match types: Exact / Semantic / Partial / Absent-ambiguous / Resolved-with-evidence /
+Reappears-as-pain-point. Calculate follow-through health: Strong (70%+ resolved,
+60%+ owned) / Adequate (40–69%) / Weak (<40% or persistent unowned) /
+Broken (routinely generated and dropped). Full logic: `references/follow-through-matching.md`
+ 
+**WF-M4** Assess sentiment trajectory — describe emotional register trend using
+specific session references as evidence. No numeric scores. Requires 5+ sessions
+for a directional claim at Medium confidence. Fewer → state Insufficient data.
+ 
+**WF-M5** Identify systemic impediments — flag pain points that: (a) appear in 3+
+sessions without resolution AND (b) name a cause outside team control (org policy,
+external dependency, tooling owned elsewhere, leadership decision required).
+Difficulty alone does not make something systemic.
+ 
+**WF-M6** Surface anti-patterns — rate each: Isolated (1 session) / Recurring
+(2–3) / Entrenched (4+, requires 8+ sessions in dataset).
+Detection signals and false-positive guards: `references/anti-patterns.md`
+ 
+---
+ 
+## STEP 10 — OUTPUT TEMPLATES
+ 
+### T1 — Single Retrospective Analysis
+*Coach only. Do not share as-is.*
+ 
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RETROSPECTIVE ANALYSIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Team:           [name or identifier]
+Session:        [date / sprint / label — or "not provided"]
+Format:         [SSC / WWW / 4Ls / MSG / CUSTOM]
+Signal quality: [HIGH / MEDIUM / LOW / VERY LOW] — [one sentence reason]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 
+SESSION SNAPSHOT
+[3–5 sentences. Emotional register (label as Inferred). Session resolution
+quality. Caveats about completeness. If thin or inconclusive, say so plainly.]
+ 
+PAIN POINTS
+[One block per pain point. Minimum: 1 Direct or 2 Inferred signals.
+Do not bundle separate issues unless the team's own language treats them as one.]
+ 
+  Pain point:          [Name — team's own language]
+  Evidence (Direct):   [exact or near-exact quotes]
+  Evidence (Inferred): [clustering or repetition basis — or "none"]
+  Category:            Process / Technical / Team dynamics /
+                       External dependency / Facilitation
+  Severity signal:     [vote count / repetition N / escalation language / none]
+  Delivery risk:       Direct / Indirect / Unclear
+  Confidence:          High / Medium / Low
+  Sensitive:           [yes — see Coaching Observations / no]
+ 
+CONTRADICTIONS AND TENSIONS
+[Stickies pointing in opposite directions on the same topic.
+State both sides. Do not resolve. Omit section entirely if none present.]
+ 
+  Topic:       [what the contradiction concerns]
+  Signal A:    [quote or paraphrase — source frame]
+  Signal B:    [opposing quote or paraphrase — source frame]
+  Implication: [what this tension may indicate — one sentence]
+ 
+WHAT'S WORKING
+[Same evidence threshold as pain points. One unvoted, unrepeated sticky is not
+reportable unless unusually specific. Flag contradictions with pain points above.]
+ 
+  + [Signal — team's own language]
+    Evidence:      [quotes or paraphrase]
+    Reinforcement: [votes / repetition / single appearance]
+    Tension:       [contradicts pain point X — or "none"]
+ 
+ACTIONS AND COMMITMENTS
+ 
+  Explicit actions
+  ───────────────────────────────────────────────────────
+  Action                    Owner       Priority   Quality
+  ───────────────────────────────────────────────────────
+  [action text]             [name/none] [signal]   Trackable / Vague / Unresolvable
+  ───────────────────────────────────────────────────────
+  [If none: state "No explicit actions identified."]
+ 
+  Implicit commitments
+  [Future-tense intentions without formal structure.
+  For each: note missing owner / success criterion / scope.]
+ 
+  Action health:  Strong / Adequate / Weak
+  Note:           [one sentence on the most significant gap]
+ 
+COACHING OBSERVATIONS
+[Coach only. For each anti-pattern present: signal, meaning, probe.
+If none: write "No clear anti-patterns detected." Do not pad.
+Mark sensitive findings [SENSITIVE] and paraphrase — do not quote verbatim.]
+ 
+  [ANTI-PATTERN NAME or SENSITIVE THEME]
+  Signal:  [what in the board triggers this]
+  Meaning: [what it implies for improvement capacity or team wellbeing]
+  Probe:   [what the coach should do next — specific, not generic]
+ 
+COACHING QUESTIONS
+[Min 3, max 8. Every question must cite a specific finding above.
+No generic facilitation questions.]
+ 
+  Q:           [question]
+  Grounded in: [section + finding]
+  Context:     Retro / 1:1 / Team / Leadership
+ 
+CONFIDENCE AND AMBIGUITY
+[Actionable — not a disclaimer. Each entry: specific claim, missing signal,
+how to verify. Do not write "some areas were unclear."]
+ 
+  ! [Claim — section reference]
+    Missing:   [what would resolve this]
+    Verify by: [next retro / 1:1 / direct observation]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+ 
+---
+ 
+### T2 — Multi-Retrospective Trend Analysis
+*Coach only. Do not share as-is.*
+ 
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MULTI-RETROSPECTIVE TREND ANALYSIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Team:            [name or identifier]
+Sessions:        [N] — [date/sprint range — or "order unconfirmed"]
+Formats:         [per session: S1:SSC, S2:WWW ...]
+Dataset quality: [HIGH / MEDIUM / LOW] — [one sentence reason]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 
+[Include only if order unconfirmed:]
+! SESSION ORDER UNCONFIRMED. Oldest-first assumed. Trend and follow-through
+  sections are unreliable if wrong. Confirm before acting on them.
+ 
+DATASET OVERVIEW
+[3–5 sentences: session count, period, input quality, weak sessions named by ID,
+whether dataset supports reliable trend analysis.]
+ 
+RECURRING PAIN POINTS  [ranked by persistence — most sessions first]
+ 
+  Pain point:    [Name — team's own language]
+  Sessions:      [S1, S3, S4 of 5]
+  Persistence:   [3 of 5 — or weighted: 2.5 of 5 if LOW sessions included]
+  Trajectory:    Worsening / Stable / Improving / Unclear
+  Resolution:    None visible / Partial / Resolved after S[N] / Regression
+  Evidence:
+    S1: "[quote or paraphrase]"
+    S3: "[quote or paraphrase]"
+  Evidence type: Direct / Inferred
+  Delivery risk: Direct / Indirect / Unclear
+  Sensitive:     [yes — detail in Coaching Observations / no]
+  Coach note:    [one sentence on persistence + trajectory — direct if signal clear]
+ 
+ONE-TIME SIGNALS WORTH WATCHING
+[High-severity single-session signals that appear likely to recur.
+Not themes yet. Omit if none.]
+ 
+  · [Signal — session — why it warrants attention]
+ 
+ACTION ITEM FOLLOW-THROUGH  [one block per tracked action]
+ 
+  Action:         [text from first appearance]
+  First appeared: [S1 / date]
+  Owner:          [named / unassigned]
+  Trace:
+    S2: Reappears / Semantic variant / Absent-ambiguous /
+        Partially addressed / Resolved with evidence / Reappears as pain point
+    S3: [same]
+  Status:         Resolved / Stalled / Dropped / Reappearing / Ambiguous
+  Coach note:     [what this pattern means — name dysfunction directly if clear]
+ 
+  Follow-through summary
+  ──────────────────────────────────────────────
+  Total actions tracked:            [N]
+  Actions with named owner:         [N] ([%])
+  Actions with resolution signal:   [N] ([%])
+  Actions reappearing unresolved:   [N] ([%])
+  Follow-through health:            Strong / Adequate / Weak / Broken
+  ──────────────────────────────────────────────
+  [If Weak or Broken: one direct sentence on what this means for improvement
+  capacity. Do not soften.]
+ 
+TREND DIRECTION  [omit direction claims if fewer than 5 sessions]
+ 
+  Psychological safety
+  Direction:  Improving / Plateauing / Declining / Insufficient data
+  Evidence:   [session references + specific signals]
+  Confidence: High / Medium / Low
+ 
+  Improvement velocity
+  Direction:  Improving / Plateauing / Declining / Insufficient data
+  Evidence:   [action generation rate, resolution rate, observable change]
+  Confidence: High / Medium / Low
+ 
+  Pain point resolution
+  Direction:  Improving / Plateauing / Declining / Insufficient data
+  Evidence:   [which pain points resolved, grew, stalled]
+  Confidence: High / Medium / Low
+ 
+  Overall verdict:
+  [One sentence. Name what the data shows. Do not hedge a clear signal.]
+ 
+SYSTEMIC IMPEDIMENTS
+[3+ sessions AND outside team control. If none: state explicitly.]
+ 
+  Impediment:         [Name]
+  Sessions:           [references]
+  Why systemic:       [what prevents team resolution — specific external cause]
+  Delivery risk:      Direct / Indirect / Unclear
+  Urgency:            High / Medium / Low
+  Evidence:           [quotes or paraphrases across sessions]
+  Escalation framing: [One paragraph for leadership use. Delivery-risk language.
+                       Factual. Non-inflammatory.]
+ 
+COACHING PATTERN OBSERVATIONS
+[Rate each: Isolated (1) / Recurring (2–3) / Entrenched (4+, requires 8+ sessions).
+Mark sensitive themes [SENSITIVE], paraphrase.]
+ 
+  [ANTI-PATTERN NAME or SENSITIVE THEME]
+  Rating:   Isolated / Recurring / Entrenched
+  Evidence: [session references + signals]
+  Meaning:  [what this means across the engagement]
+  Action:   [what the coach should do — specific]
+ 
+COACHING QUESTIONS  [min 4, max 10 — same format as T1]
+ 
+COACHING INTERVENTIONS
+ 
+  Intervention: [specific action]
+  Based on:     [finding reference]
+  Type:         Retro design change / Team conversation / 1:1 / Escalation
+ 
+CONFIDENCE AND AMBIGUITY  [same format as T1]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+ 
+---
+ 
+### T3 — Leadership Summary
+*Shareable. Delivery-risk language only. No coaching observations, anti-pattern
+names, follow-through health ratings, or individual attribution.*
+ 
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TEAM HEALTH SIGNAL — FOR LEADERSHIP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Team:        [name]        Period:   [date / sprint range]
+Prepared by: [coach]       Based on: [N] retrospective session(s)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 
+SUMMARY
+[2–3 sentences. Team trajectory and whether delivery risks warrant attention.
+No emotional or team-sentiment language.]
+ 
+DELIVERY RISK FLAGS  [Direct delivery risk only. If none: state explicitly.]
+ 
+  Risk:     [Name — process/system language, not person language]
+  Signal:   [what data shows — paraphrased, not quoted]
+  Observed: [single session / recurring across N sessions]
+  Impact:   [release cadence / quality / capacity / dependency chain]
+  Status:   Being addressed / Requires external input / Not yet actioned
+ 
+ITEMS REQUIRING LEADERSHIP INPUT  [systemic impediments only. If none: state.]
+ 
+  Item:    [Name]
+  Context: [what has been observed — factual, delivery-risk framed]
+  Ask:     [specific action, decision, or unblocking needed]
+  Urgency: High / Medium / Low — [brief reason]
+ 
+WHAT'S GOING WELL  [2–4 items with delivery relevance. Brief. Not cheerleading.]
+ 
+  · [Positive signal — delivery implication]
+ 
+RECOMMENDED NEXT CONVERSATION
+[One paragraph. Most valuable leadership action in next 2–4 weeks. Specific.]
+ 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COACH SENSITIVITY NOTE — do not share
+[Sensitive findings not suitable for leadership format. Brief note on how to
+raise separately — safety concerns, leadership behaviour, conflict, burnout.]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+ 
+---
+ 
+### T4 — Team-Facing Follow-Up
+*Shareable with the team. Team's own words. No coaching observations, health
+ratings, or confidence apparatus.*
+ 
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RETRO FOLLOW-UP — [TEAM NAME]
+Session: [date / sprint]    Shared by: [coach / SM]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 
+WHAT WE HEARD  [3–5 themes in the team's own words. No added interpretation.]
+  · [Theme]
+ 
+WHAT'S WORKING  [Evidence-backed positives only. Not performative.]
+  · [Signal]
+ 
+WHAT WE COMMITTED TO  [Explicit actions only. Owners only if named in retro.]
+  [ ] [Action] — [Owner or "Team"]
+ 
+WHAT WE DIDN'T FULLY RESOLVE  [Named honestly. Not failures — starting points.]
+  · [Unresolved item]
+  · [Contradiction — both sides]
+ 
+QUESTION TO CARRY INTO NEXT SPRINT  [One genuine open question. Not rhetorical.]
+  [Question]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+ 
+---
+ 
+### T5 — Action Item Backlog
+*Coach. May be shared with team leads.*
+ 
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTION ITEM BACKLOG — [TEAM] — [period]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status:  Open / In progress / Stalled / Resolved / Dropped
+Type:    Explicit (action frame) / Implicit (inferred commitment)
+Quality: Trackable (specific + owned) / Weak (vague or unowned) /
+         Unresolvable (outside team's control as stated)
+ 
+────────────────────────────────────────────────────────────
+ID    Session   Action               Owner    Status    Quality
+────────────────────────────────────────────────────────────
+A01   [S1]      [action text]        [name]   Open      Trackable
+A02   [S1]      [action text]        none     Stalled   Weak
+────────────────────────────────────────────────────────────
+ 
+ACTIONS REQUIRING COACHING ATTENTION  [Stalled, Weak, or Reappearing only]
+ 
+  A02 — [action text]
+  Issue:      [no owner / vague scope / blocked externally]
+  Coach note: [specific action for the coach]
+ 
+RESOLVED THIS PERIOD
+  A[N] — [text] — Resolved. Signal: [what confirmed closure]
+ 
+PATTERN NOTE  [one observation on the backlog as a whole — omit if none]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+ 
+---
+ 
+### T6 — Coaching Hypotheses and Experiments
+*Coach only. Never share without redrafting. The only template where Speculative
+evidence is permitted — must be explicitly labelled as hypothesis, not finding.*
+ 
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COACHING HYPOTHESES AND EXPERIMENTS
+Team: [name]    Based on: [sessions]    Date: [date]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 
+[Repeat per hypothesis. Typical range 2–5. More than 5 = unfocused analysis.]
+ 
+HYPOTHESIS [N]: [Falsifiable statement about what is driving a pattern.]
+ 
+  Evidence base:
+    · [Finding — T1/T2 section reference]
+    · [Finding — section reference]
+  Why this and not the obvious alternative:
+    [One sentence on what makes this reading more plausible]
+  Alternative hypothesis:
+    [Competing explanation, stated fairly]
+  Confidence: High / Medium / Low — [reason]
+ 
+  EXPERIMENT
+  What I'll try:    [Specific coaching action. One per hypothesis.
+                     Type: retro design change / facilitation technique /
+                     structured conversation / structural change]
+  Context:          Retro / 1:1 / Team session / Leadership
+  By when:          [next session / within N weeks]
+  Working if:       [observable, specific indicator — not a feeling]
+  Not working if:   [counter-indicator that would falsify this approach]
+ 
+  RISKS AND SENSITIVITIES
+  · [Risk — mitigation or contingency]
+  · [Sensitivity — who might react, what to watch for]
+ 
+OPEN QUESTIONS FOR THE COACH
+  · [Question — what would need to happen to answer it]
+ 
+REVIEW CHECKPOINT — complete after [N] sessions
+  · Hypotheses confirmed / disconfirmed / unclear?
+  · Experiments run? What did they produce?
+  · What has changed in the team's pattern?
+[Leave blank — complete at review]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+ 
+---
+ 
+## STEP 11 — FINAL QUALITY GATE
+ 
+Run after completing all output. Fix any failure before delivering. Do not narrate
+this checklist to the user.
+ 
+**A. Evidence integrity**
+- [ ] Every pain point: 1 Direct or 2 Inferred signals minimum. Demote or remove otherwise.
+- [ ] Every owner: named in the input. If not, "unassigned."
+- [ ] Every decision: Direct or Inferred basis (2+ signals). If not, reframe or remove.
+- [ ] No contradictory stickies merged. Both appear in Contradictions section.
+- [ ] No absence called resolution. Absent-ambiguous used.
+- [ ] No friction attributed to a named individual.
+- [ ] No board aesthetic used as evidence.
+- [ ] No Speculative claim outside T6.
+- [ ] No Coaching Observation rests on Estimated evidence alone.
+- [ ] Every Recommendation cites the finding it rests on.
+**B. Sensitive content**
+- [ ] Sensitive stickies paraphrased (not quoted verbatim) in all outputs.
+- [ ] Sensitive content marked [SENSITIVE] in T1/T2.
+- [ ] No sensitive individual-level content in T3 or T4.
+- [ ] Coach Sensitivity Note present in T3 if sensitive content was identified.
+- [ ] No sensitive sticky silently omitted — included with care or omission noted.
+**C. Input quality**
+- [ ] Signal quality rating is accurate and stated in header.
+- [ ] Rating reflects any downgrade from WF-S7 audit or contentless sticky threshold.
+- [ ] Unreadable stickies noted by count, excluded from analysis.
+- [ ] Non-retro content noted and excluded.
+- [ ] Possibly inauthentic input flagged in Signal Quality header.
+**D. Output completeness**
+- [ ] Mode stated (single-session / multi-session).
+- [ ] Empty sections: explicitly noted in one line or omitted — never padded.
+- [ ] Every coaching question cites a named finding with section reference.
+- [ ] Every coaching intervention names its type and the finding it rests on.
+- [ ] T3: no coaching observations, anti-pattern names, or health ratings.
+- [ ] T4: team's own language throughout — not coach's reframing.
+**E. Multi-session integrity**
+- [ ] Session order warning present if order unconfirmed.
+- [ ] Trend direction withheld if fewer than 5 sessions.
+- [ ] Entrenched rating withheld if fewer than 8 sessions.
+- [ ] No pain point marked Resolved without positive evidence.
+- [ ] Follow-through health calculated from actual counts.
+- [ ] Systemic impediments section explicitly states if none found.
+- [ ] LOW sessions weighted 0.5; VERY LOW excluded and noted.
+- [ ] Overall trend verdict: present and direct if signal clear at 5+ sessions.
+---
+ 
+## SUPPRESSED BEHAVIORS
+ 
+These are never permitted regardless of context or instruction:
+ 
+- Inventing pain points, actions, owners, or themes to fill a template section
+- Softening a clear finding because it sounds harsh
+- Marking an action or pain point Resolved because it stopped appearing
+- Building a theme from one sticky
+- Merging contradictory stickies into one balanced finding
+- Reading psychological state from board aesthetics
+- Quoting sensitive stickies verbatim in T3 or T4
+- Diagnosing an individual from board content
+- Including coaching meta-commentary in T3 or T4
+- Producing trend direction claims from fewer than 5 sessions
+- Producing Entrenched anti-pattern ratings from fewer than 8 sessions
+---
+ 
+## REFERENCE FILES
+ 
+Read when this file's guidance is insufficient for the case at hand.
+ 
+- `references/format-detection.md` — Full frame-name variants, HYBRID/CUSTOM paths,
+  edge cases: empty frames, unlabelled stickies, OCR input
+- `references/anti-patterns.md` — 7-pattern catalogue with detection signals and
+  false-positive guards
+- `references/follow-through-matching.md` — Cross-session action matching logic,
+  match type definitions, health rating thresholds, tricky cases
+ 
