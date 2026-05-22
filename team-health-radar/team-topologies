@@ -1,0 +1,106 @@
+# Team Topologies Overlay
+
+When the user requests a Team Topologies health assessment, use this framework as your lens. Team Topologies shifts focus from individual team behaviours to team design, cognitive load, and interaction patterns as the primary levers of organisational health.
+
+---
+
+## Core Team Topologies Concepts
+
+### Four Fundamental Team Types
+| Type | Purpose | Healthy signs | Warning signs |
+|------|---------|--------------|--------------|
+| **Stream-aligned** | Deliver value on a single stream of work end-to-end | Fast flow, high autonomy, minimal external dependencies | Doing platform/enabling work themselves; blocked by other teams; too broad a scope |
+| **Platform** | Reduce cognitive load for stream-aligned teams via self-service capabilities | Teams adopt the platform willingly; platform enables rather than gates | Bureaucratic approval processes; platform teams as bottlenecks; low adoption |
+| **Enabling** | Help stream-aligned teams acquire new capabilities | Short-lived engagements; teams become self-sufficient; facilitating not doing | Long-term dependency on enabling team; doing the work instead of upskilling |
+| **Complicated Subsystem** | Manage high cognitive-load specialist components | Clear ownership; minimal direct interaction required | Over-reliance on subsystem team; knowledge hoarding; bottleneck formation |
+
+### Three Interaction Modes
+| Mode | Description | When healthy | When not |
+|------|-------------|-------------|---------|
+| **Collaboration** | Two teams work closely together, often temporarily | Active co-creation; diverging toward independence | Permanent collaboration; unclear ownership; neither team learning |
+| **X-as-a-Service** | One team consumes another's service with minimal interaction | Consumer team is unblocked; service is self-serve | Service team is a constant bottleneck; requires too much hand-holding |
+| **Facilitating** | Enabling team helps a stream-aligned team acquire capability | Stream-aligned team becomes self-sufficient; enabling team moves on | Enabling team becomes permanent; dependency persists |
+
+---
+
+## Mapping: Team Topologies Signals → 8 Dimensions
+
+| Team Topologies signal | Primary Dimension | Secondary Dimension |
+|---|---|---|
+| Cognitive load (is it manageable?) | Delivery | Technical Health |
+| Team API (is the team's interface clear?) | Collaboration | Process & Practices |
+| Interaction mode health | Collaboration | Team Autonomy |
+| Platform adoption & enablement | Technical Health | Process & Practices |
+| Stream-alignment (true end-to-end?) | Team Autonomy | Customer Focus |
+| Team type clarity (do they know what they are?) | Team Autonomy | Continuous Improvement |
+| Feedback loops to users/customers | Customer Focus | Continuous Improvement |
+| Team evolution & learning | Continuous Improvement | — |
+| Psychological safety signals | Psychological Safety | Collaboration |
+
+---
+
+## Key Assessment Questions by Dimension
+
+Use these to probe signals or guide coaching conversations.
+
+**Delivery / Cognitive Load**
+- Is the team's scope manageable, or are they juggling too many contexts?
+- How much of their time is spent on work that "should" belong to another team type?
+- Does the team have the tools, knowledge, and access they need without dependency bottlenecks?
+
+**Collaboration / Team API**
+- Is it clear how other teams interact with this team? Do they have a defined interface?
+- Are interaction modes appropriate (collaboration vs. X-as-a-Service vs. facilitating)?
+- Are any collaborations that should be time-boxed becoming permanent?
+
+**Team Autonomy / Stream Alignment**
+- Is this a truly stream-aligned team, or are they doing work that spans multiple value streams?
+- What percentage of their dependencies are blocking vs. enabling?
+- Can they deploy and deliver independently without coordinating with other teams on every release?
+
+**Technical Health / Platform Enablement**
+- Is the platform reducing cognitive load, or adding to it?
+- Are there self-service capabilities the team relies on, or do they have to request everything?
+- Is specialist knowledge accessible (through a subsystem team or platform) without creating bottlenecks?
+
+**Customer Focus / Value Stream**
+- Is the team aligned to a single, identifiable value stream?
+- Can they trace their work directly to user/customer outcomes?
+- Who defines the customer for this team, and how clear is that definition?
+
+---
+
+## Team Type Health Indicators
+
+### Stream-Aligned Team (most common)
+🟢 Healthy: Clear value stream; end-to-end delivery capability; minimal cross-team coordination required; fast flow; customer connection
+🟡 Developing: Some scope creep into platform/enabling work; moderate dependencies; customer connection indirect
+🔴 At Risk: Doing work across multiple value streams; chronic dependencies; can't release independently; no customer connection
+
+### Platform Team
+🟢 Healthy: Teams adopt willingly; self-service; reduces cognitive load; clear roadmap driven by stream-aligned team needs
+🟡 Developing: Some bottleneck tendencies; partial self-service; adoption uneven
+🔴 At Risk: Approval gate for everything; teams route around platform; building for its own sake not for consumers
+
+### Enabling Team
+🟢 Healthy: Short-lived engagements; teams become self-sufficient; moves on
+🟡 Developing: Engagements running longer than planned; some skill transfer happening
+🔴 At Risk: Permanent fixture; doing the work instead of upskilling; dependency growing
+
+---
+
+## Output Format for Team Topologies Mode
+
+Add a "Team Topologies Context" section before the Health Radar:
+
+```
+### Team Topologies Context
+**Team type:** [Stream-aligned / Platform / Enabling / Complicated Subsystem / Unknown]
+**Primary interaction modes:** [Collaboration / X-as-a-Service / Facilitating — with which teams]
+**Cognitive load assessment:** [Manageable / Elevated / Overloaded]
+**Key design tensions:** [1–2 structural issues that are shaping the team's health picture]
+```
+
+Then proceed with the standard Health Radar and Coaching Brief, using Team Topologies language where relevant (e.g., "cognitive load" instead of "scope", "stream alignment" instead of "focus").
+
+In the Coaching Brief's Recommended Focus Areas, include at least one structural/organisational recommendation (e.g., "consider splitting this team's scope into two stream-aligned teams") if the signals support it.
