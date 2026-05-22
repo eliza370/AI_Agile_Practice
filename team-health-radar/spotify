@@ -1,0 +1,125 @@
+# Spotify Squad Health Check Overlay
+
+When the user requests a Spotify Squad Health Check, use this framework as your scoring lens. Map each of the 11 original Spotify indicators to the 8 health dimensions, then score using Spotify's three-point scale.
+
+---
+
+## Spotify Scoring Scale
+
+| Label | Meaning | Maps to RAG |
+|-------|---------|-------------|
+| Awesome 😊 | This is working great for us | 🟢 Green (4–5) |
+| OK 😐 | There are some issues but we're managing | 🟡 Amber (2–3) |
+| Needs Improvement 😞 | This is a real problem for us | 🔴 Red (1–2) |
+
+Also capture **direction**: ↑ Getting Better / → Same / ↓ Getting Worse
+
+Present scores using Spotify's original language (Awesome / OK / Needs Improvement) alongside the RAG equivalent so the output is useful for coaches who report in Spotify terms.
+
+---
+
+## Mapping: 11 Spotify Indicators → 8 Dimensions
+
+| Spotify Indicator | Primary Dimension | Secondary Dimension |
+|---|---|---|
+| Easy to Release | Delivery | Technical Health |
+| Suitable Process | Process & Practices | — |
+| Tech Quality (Clean Code) | Technical Health | Delivery |
+| Value | Customer Focus | — |
+| Speed | Delivery | Process & Practices |
+| Mission | Customer Focus | Team Autonomy |
+| Fun | Psychological Safety | Collaboration |
+| Learning | Continuous Improvement | — |
+| Support | Team Autonomy | Collaboration |
+| Pawns or Players | Team Autonomy | — |
+| Teamwork | Collaboration | Psychological Safety |
+
+---
+
+## Spotify Indicator Definitions
+
+Use these to interpret what the team is reporting or what you've observed.
+
+**Easy to Release**
+- Awesome: Releasing is simple, safe, and can happen any time
+- OK: Releases work but require some manual steps or coordination
+- Needs Improvement: Releases are painful, risky, or rare
+
+**Suitable Process**
+- Awesome: Our process helps us work effectively; we own it and adapt it
+- OK: Process mostly works but has some friction or overhead
+- Needs Improvement: Process feels like an obstacle; it slows us down or we work around it
+
+**Tech Quality (Clean Code)**
+- Awesome: We're proud of our codebase; it's easy to work in
+- OK: Some parts are messy but we manage
+- Needs Improvement: Technical debt is a real problem that slows us down daily
+
+**Value**
+- Awesome: We deliver great value to our users; we know what impact our work has
+- OK: We think we're delivering value, but we're not always sure
+- Needs Improvement: We don't know if what we're building matters; we're shipping features into the void
+
+**Speed**
+- Awesome: We move fast; we can go from idea to production quickly
+- OK: Speed is acceptable but there's room to improve
+- Needs Improvement: We're too slow; too many blockers, handoffs, or delays
+
+**Mission**
+- Awesome: We know exactly why we're here and what we're trying to achieve; it's motivating
+- OK: Our mission is OK; it could be clearer
+- Needs Improvement: We don't really understand why we exist or what we're supposed to accomplish
+
+**Fun**
+- Awesome: We love coming to work; the team has great energy
+- OK: Work is fine; not amazing but not bad
+- Needs Improvement: It doesn't feel fun anymore; morale is low
+
+**Learning**
+- Awesome: We're always learning new things and growing; the team feels alive
+- OK: We learn sometimes but not as much as we'd like
+- Needs Improvement: We're not learning; no time, no support, same patterns repeating
+
+**Support**
+- Awesome: We have great support from the organisation; we get what we need
+- OK: Support is OK; sometimes we have to chase things
+- Needs Improvement: We feel unsupported; blockers from outside the team are chronic
+
+**Pawns or Players**
+- Awesome: We decide what to build and how to build it; we feel empowered
+- OK: We have some say but not as much as we'd like
+- Needs Improvement: We feel like pawns; decisions are made for us, not with us
+
+**Teamwork**
+- Awesome: We're a great team; we trust each other and collaborate well
+- OK: Teamwork is decent; some rough edges
+- Needs Improvement: Teamwork is a real problem; there's conflict, silos, or low trust
+
+---
+
+## Output Format for Spotify Mode
+
+In the Health Radar table, add a "Spotify Score" column showing the Spotify label alongside the standard score:
+
+| Dimension | Status | Score | Spotify Score | Evidence | Trend |
+|---|---|---|---|---|---|
+| Delivery | 🟡 Amber | 3/5 | OK 😐 | ... | ↓ |
+
+At the top of the Coaching Brief, include a "Spotify Health Card" summary showing all 11 indicators with their Awesome / OK / Needs Improvement ratings — this is the format teams recognise from the original Health Check posters.
+
+```
+### Spotify Health Card
+| Indicator        | Score              | Direction |
+|------------------|--------------------|-----------|
+| Easy to Release  | OK 😐              | ↓         |
+| Suitable Process | OK 😐              | →         |
+| Tech Quality     | Needs Improvement 😞 | ↓       |
+| Value            | Needs Improvement 😞 | →       |
+| Speed            | OK 😐              | ↓         |
+| Mission          | OK 😐              | →         |
+| Fun              | Awesome 😊         | →         |
+| Learning         | OK 😐              | →         |
+| Support          | Needs Improvement 😞 | ↓       |
+| Pawns or Players | OK 😐              | →         |
+| Teamwork         | Awesome 😊         | →         |
+```
