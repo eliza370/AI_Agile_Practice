@@ -25,6 +25,7 @@ Structured AI skill files (markdown-based) that can analyze team artifacts at de
 - **Refinement session analyzer** — takes a transcript of a refinement session and identifies topics that consumed disproportionate time, recurring points of confusion, and signals that a story isn't ready
 - **Sprint pattern detector** — analyzes multiple sprint exports from Jira to surface velocity trends, recurring blockers, and systemic issues that don't show up in any single retrospective
 - **Retro pattern analyzer** — works across multiple retrospective frames from Mural or Miro to identify themes that keep resurfacing, even when the team words them differently each time
+- **Team Health Radar** - takes manual input, jira uploads, and retro notes to access team autonomy, psychological safety, customer focus, technical health and more, then produces a report usable by coaches for themselves, the team, and leadership (Spotify and Team Topologies)
 
 ### `/templates`
 Facilitation templates and ceremony canvases that incorporate AI-assisted steps without replacing the human judgment calls that only a coach can make.
