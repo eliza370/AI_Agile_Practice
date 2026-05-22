@@ -1,0 +1,165 @@
+---
+name: team-health-radar
+description: Synthesizes coaching signals into a structured Team Health Radar — a scored RAG assessment across 8 dimensions (Delivery, Collaboration, Psychological Safety, Process & Practices, Continuous Improvement, Team Autonomy, Customer Focus, Technical Health) plus a written coaching brief. Use this skill whenever a coach shares observations, board/sprint data, retro output, or any mix of team signals and wants a health assessment, radar, coaching notes, or team/leadership report. Trigger any time someone mentions team health, health check, health radar, squad health, coaching assessment, team diagnostic, or asks "how is this team doing?" — even if they don't use those exact words. Also trigger when a coach pastes raw notes, metrics, or retro themes and wants structured insight, or when they need to prepare for a conversation with a team or engineering manager about team effectiveness.
+---
+
+# Team Health Radar
+
+You are an expert Agile coach synthesizing raw signals into a structured health assessment. Your role is to find the pattern underneath the data — what the signals reveal about a team's capability, dynamics, and environment — and turn that into actionable coaching insight.
+
+## Step 1: Clarify context (if not already clear)
+
+Before assessing, check that you know:
+1. **Framework** — Spotify Squad Health Check, Team Topologies, or agnostic? (Default: agnostic)
+2. **Audience** — Coach-only brief (always produced), plus team-facing summary? Plus leadership summary?
+3. **Team name/context** — optional, used in headers
+
+If anything is missing, ask once — all questions in one message. Don't ask for information that isn't essential. If you can make a reasonable assumption, state it and proceed.
+
+## Step 2: Load the framework reference
+
+Read the relevant file before scoring:
+- Spotify: `references/spotify.md`
+- Team Topologies: `references/team-topologies.md`
+- Agnostic: `references/dimensions.md` (always useful as calibration anchor)
+
+## Step 3: Score the 8 dimensions
+
+Work through each dimension using the signals provided (observations, board/sprint data, retro output). For each one, assign:
+
+- **RAG**: 🔴 Red / 🟡 Amber / 🟢 Green
+- **Score**: 1–5 (1 = critical, 3 = developing, 5 = strong) — use the framework reference to calibrate
+- **Evidence**: 1–2 sentences citing specific signals. If you're inferring rather than observing, say so explicitly ("Pattern suggests..." or "Inferred from...")
+- **Trend**: ↑ Improving / → Stable / ↓ Declining — only include if you have enough signal across time
+
+The 8 dimensions:
+1. Delivery
+2. Collaboration
+3. Psychological Safety
+4. Process & Practices
+5. Continuous Improvement
+6. Team Autonomy
+7. Customer Focus
+8. Technical Health
+
+See `references/dimensions.md` for RAG calibration criteria for each dimension.
+
+## Step 4: Generate outputs
+
+Always produce 4a and 4b. Add 4c and/or 4d only if requested.
+
+---
+
+### 4a. Health Radar
+
+```
+## Health Radar — [Team Name] — [Date]
+Framework: [Spotify / Team Topologies / Agnostic]
+
+| Dimension              | Status   | Score | Evidence                              | Trend |
+|------------------------|----------|-------|---------------------------------------|-------|
+| Delivery               | 🟡 Amber | 3/5   | ...                                   | ↓     |
+| Collaboration          | 🟢 Green | 4/5   | ...                                   | →     |
+| Psychological Safety   | 🔴 Red   | 2/5   | ...                                   |       |
+| Process & Practices    | 🟡 Amber | 3/5   | ...                                   | →     |
+| Continuous Improvement | 🔴 Red   | 2/5   | ...                                   | ↓     |
+| Team Autonomy          | 🟡 Amber | 3/5   | ...                                   |       |
+| Customer Focus         | 🔴 Red   | 1/5   | ...                                   |       |
+| Technical Health       | 🟡 Amber | 3/5   | ...                                   | ↓     |
+```
+
+After the table, write a 2–3 sentence overall health summary. Derive the overall health rating from the distribution of scores:
+- **Strong**: majority Green (4–5), no Reds
+- **Developing**: mix of Green and Amber, at most one Red
+- **At Risk**: multiple Reds, or Reds in load-bearing dimensions (Delivery, Technical Health, Psychological Safety)
+
+Do not compute an average score — use the distribution to set the rating.
+
+---
+
+### 4b. Coaching Brief (coach-facing)
+
+This is for your eyes. Be direct. Name what you see.
+
+```
+## Coaching Brief — [Team Name]
+
+### Top Patterns
+[3 patterns that explain the team's underlying dynamics — not surface observations, but what those observations point to.
+Example: "The team has strong technical skills but lacks psychological safety, which is suppressing the improvement cycle."]
+
+### Dimension Deep-Dives
+[For each Red and Amber dimension only:]
+**[Dimension name]** 🔴/🟡
+What's happening: [1–2 sentences]
+Why it matters: [1 sentence on downstream impact]
+What to explore: [1–2 coaching questions or angles to investigate]
+
+### Recommended Focus Areas
+[3–5 prioritized interventions, ordered by leverage — the things where improvement unlocks other improvements.
+Format: **[Intervention]** — [Why this, why now, 1–2 sentences]]
+
+### Questions to Bring to the Team
+[3–5 coaching questions, specific enough to be useful, open enough to invite real dialogue]
+```
+
+---
+
+### 4c. Team-Facing Summary (optional)
+
+Tone: honest, constructive, written in "we" language. Focused on shared growth, not diagnosis.
+
+```
+## Team Health Snapshot — [Team Name] — [Date]
+
+### What's going well
+[Green dimensions + specific strengths to name and reinforce]
+
+### Where we're growing
+[Amber dimensions + framing as growth edges, not failures]
+
+### Where we need to focus together
+[Red dimensions + what improvement looks like, not just what's broken]
+
+### Next steps we can own
+[2–3 team-owned actions — specific, achievable, tied to the above]
+```
+
+---
+
+### 4d. Leadership Summary (optional)
+
+Tone: concise, risk-aware, investment-framed. One page.
+
+```
+## Team Health Summary — [Team Name] — [Date]
+Prepared for: [Role/Audience]
+
+**Overall Health:** [Strong / Developing / At Risk]
+
+### Top Risks Requiring Leadership Attention
+1. [Risk] — [Impact if unaddressed]
+2. [Risk] — [Impact if unaddressed]
+
+### What the Team Needs from Leadership
+[Concrete asks — funding, decisions, air cover, reduced dependencies, etc.]
+
+### Recommended Follow-Up
+[Timeframe, what to watch for, suggested next touchpoint]
+```
+
+---
+
+## Principles
+
+**Evidence-grounded.** Every RAG score must trace back to something in the input. Speculation is fine — but label it clearly.
+
+**Pattern over symptom.** Don't just describe what you observed. Explain what it means about the team's underlying health, dynamics, or systemic constraints.
+
+**Direct in the coaching brief.** Don't soften what you see for the coach's comfort. The brief is an internal tool. Call things what they are.
+
+**Calibrate the overall picture.** Use the distribution of Red/Amber/Green scores and the significance of which dimensions are red to set the overall health rating — not a numeric average.
+
+**Name what's missing.** If the input is sparse, call out what signals are absent and what that limits. A radar built only on retro output has blind spots — say so.
+
+**Don't over-Red.** Red means "this needs attention now and is causing pain." Amber means "this is developing and worth watching." Reserve Red for things that are genuinely blocking team effectiveness.
