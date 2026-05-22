@@ -1,0 +1,134 @@
+# Anti-Pattern Catalogue
+
+Detection signals and false-positive guards for each anti-pattern.
+Read this file when a coaching observation in S5 or M6a requires deeper evidence assessment.
+
+---
+
+## 1. Repetition Without Resolution
+
+**What it is:** The same pain point appears across multiple retros with no evidence of action, ownership, or change.
+
+**Detection signals:**
+- Pain point language is nearly identical across sessions (same words, same framing)
+- The topic appears in the negative/pain frame in 3+ consecutive sessions
+- No corresponding action item with an owner exists in any session
+- Action items do exist but the pain point continues appearing despite them
+
+**False-positive guards:**
+- Some pain points are slow to resolve legitimately (e.g. org restructure, tool procurement). Do not flag as anti-pattern if there is evidence of active mitigation even without resolution.
+- External dependency pain points (waiting on another team, waiting on budget) should be classified as systemic impediments, not as repetition-without-resolution — the team may be doing everything they can.
+
+**Coaching significance:** This is the clearest signal that retrospectives are not driving improvement. The retro is functioning as a venting ritual, not a change mechanism.
+
+---
+
+## 2. Action Item Graveyard
+
+**What it is:** Actions are generated regularly but rarely owned, rarely followed up, and rarely resolved.
+
+**Detection signals:**
+- High ratio of actions to named owners across sessions
+- Actions reappear in later sessions' pain point frames
+- No evidence of "how did that go?" checking in subsequent retros
+- Follow-through health rated Weak or Broken in M3 summary
+
+**False-positive guards:**
+- A single session with unowned actions is not a graveyard. The pattern requires 3+ sessions.
+- If the team is new (first 3 retros of a new team), unowned actions may reflect maturity, not dysfunction.
+- Unassigned actions that are genuinely shared team commitments (e.g. "we will all update tickets same-day") are different from individually-owned actions that were never assigned.
+
+**Coaching significance:** Indicates either that the team does not believe retro actions will be enforced, or that the facilitator is not closing the loop. Both are coachable. Distinguish between them before intervening.
+
+---
+
+## 3. Positive Washing
+
+**What it is:** The positive frame is disproportionately rich while the negative/improvement frame is sparse, despite contextual evidence of significant delivery problems.
+
+**Detection signals:**
+- Positive frame has 3x or more stickies than the negative frame
+- Negative frame contains only surface-level or process-neutral stickies while sprint contained incidents, missed commitments, or escalations
+- Vote counts heavily favour positive stickies
+- Improvement actions are generic ("communicate better", "update tickets") with no specificity
+
+**False-positive guards:**
+- Not every retro with more positives than negatives is positive-washing. If the sprint genuinely went well and there is no external evidence of problems, do not flag.
+- Teams early in a psychological safety journey may genuinely not yet feel safe naming negatives. Flag as potential safety-building moment rather than dysfunction.
+- Some retro formats (e.g. celebrating a successful release sprint) are deliberately positive-oriented. Honour the intent.
+
+**Coaching significance:** Either the team does not feel safe naming problems, or the facilitator is inadvertently shaping output toward positives. Either erodes the retro's value over time.
+
+---
+
+## 4. Venting Without Agency
+
+**What it is:** All friction is attributed to forces outside the team's control, with no team-owned improvement items.
+
+**Detection signals:**
+- Negative stickies consistently name external actors: "the other team", "leadership", "the tool", "the process"
+- Improvement frame is empty or contains only externally-directed wishes ("they should fix X")
+- No actions that the team itself will take
+- Language is passive or helpless: "nothing we can do", "we just have to wait"
+
+**False-positive guards:**
+- Sometimes the team genuinely is blocked by external forces and an honest retro will reflect that. The anti-pattern is the absence of any team-owned response to those forces, not the naming of them.
+- A single session with predominantly external attribution during a legitimately external incident (e.g. major infrastructure outage) is not the anti-pattern.
+
+**Coaching significance:** The team has lost its sense of improvement agency. This may reflect genuine learned helplessness, or it may reflect accurate perception that retro-generated actions are never actioned — making the root cause an action item graveyard.
+
+---
+
+## 5. Facilitation Capture
+
+**What it is:** The retro output appears to reflect the views or framing of one dominant voice rather than the team's collective perspective.
+
+**Detection signals (harder to detect from text alone — flag as Estimated):**
+- Heavy clustering of similar phrasing suggesting one person wrote many stickies
+- Stickies read as commentary on other people's work rather than the team's shared experience
+- The "positive" frame contains unusually specific praise for named individuals
+- Frame names or agenda appear shaped around a pre-determined conclusion
+
+**False-positive guards:**
+- Similar phrasing may simply reflect shared experience, not capture. Do not diagnose from phrasing alone.
+- A dominant voice in a small team may be legitimate — smaller teams naturally have louder individuals.
+- If the facilitator added synthesis stickies (common in some Miro formats), these are not the same as capture.
+
+**Coaching significance:** If stickies reflect one voice, the retro is not generating team intelligence — it's generating one person's view with team branding. The coach should observe a live session before drawing conclusions from text alone.
+
+---
+
+## 6. Safety Collapse
+
+**What it is:** No negative or sensitive content is visible despite strong contextual signals that problems exist.
+
+**Detection signals:**
+- Sparse negative frame in a sprint that had incidents, missed deliverables, or team conflict
+- All stickies are bland and non-specific
+- No disagreement, no tension, no criticism of any process or outcome
+- Actions are generic and uncommitted
+
+**False-positive guards:**
+- A genuinely smooth sprint produces a thin negative frame. Do not flag safety collapse without some external signal that problems existed.
+- New teams in their first few retros often produce thin boards. This is normal maturity progression, not safety collapse.
+- Some teams consciously prefer solution-focused formats and may have thin problem-framing by design.
+
+**Coaching significance:** If safety has collapsed, the retro cannot function. The coach needs to understand why — was there a specific incident? A leadership presence? A past retro where candor had negative consequences? Address safety before trying to improve retro quality.
+
+---
+
+## 7. Format Fatigue
+
+**What it is:** The same retro format has been used for many consecutive sessions, and output quality has degraded — fewer stickies, more generic content, less engagement evident.
+
+**Detection signals (multi-session only):**
+- Declining sticky count per session across a dataset
+- Increasing genericness of language over time
+- Earlier sessions have richer, more specific content than later sessions
+- Same pain points appear with less and less elaboration
+
+**False-positive guards:**
+- Sticky count decline may reflect genuine improvement (fewer problems to name)
+- Some teams prefer consistency in format and produce consistently good output over time
+
+**Coaching significance:** The format may have run its useful life. Consider introducing a different retrospective format for the next session.
