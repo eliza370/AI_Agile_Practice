@@ -1,0 +1,131 @@
+# Dimension Calibration Reference
+
+Use this to calibrate RAG scores and 1–5 ratings when working in agnostic mode, or as an anchor when using Spotify or Team Topologies overlays.
+
+---
+
+## 1. Delivery
+
+What this measures: The team's ability to reliably ship valuable, quality work.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Consistent throughput sprint-to-sprint; minimal carry-over (<10%); clear Definition of Done applied; few prod defects; team can predict what they'll ship |
+| 4 | 🟢 | Generally reliable delivery; occasional carry-over; DoD mostly applied; rare quality issues |
+| 3 | 🟡 | Variable throughput; 20–40% carry-over; DoD inconsistently applied; some recurring quality issues |
+| 2 | 🟡 | Unpredictable delivery; chronic carry-over; DoD unclear or ignored; quality issues common |
+| 1 | 🔴 | Team rarely ships what they commit to; carry-over >50%; no effective DoD; production instability |
+
+**What to look for in inputs:** Sprint velocity trends, carry-over rate, bug/defect counts, deployment frequency, sprint goal achievement rate, release dates slipping.
+
+---
+
+## 2. Collaboration
+
+What this measures: How well the team works together internally, and how effectively they interact with other teams.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | High mutual trust; active peer support and swarming; healthy cross-team relationships; knowledge shared freely |
+| 4 | 🟢 | Generally collaborative; some knowledge silos but team addresses them; productive cross-team interactions |
+| 3 | 🟡 | Noticeable silos within or across team; collaboration is functional but not generative; some friction in cross-team work |
+| 2 | 🟡 | Clear silos; low-trust signals (e.g., blame, withholding information); cross-team relationships are strained |
+| 1 | 🔴 | Team is fragmented; blame culture; adversarial or absent cross-team relationships; people working in isolation |
+
+**What to look for in inputs:** PR review patterns (hoarding vs. sharing), retro language about "us vs. them", pair/mob work frequency, how cross-team dependencies are handled, tone in ceremonies.
+
+---
+
+## 3. Psychological Safety
+
+What this measures: Whether team members feel safe to speak up, disagree, take risks, and make mistakes without fear of punishment or embarrassment.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Team voices dissent openly; experiments freely; failures discussed as learning without blame; quieter voices heard |
+| 4 | 🟢 | Generally safe; most voices contribute; failures surfaced quickly; some self-censorship but exceptions |
+| 3 | 🟡 | One or two voices dominate; quieter members disengage; failures are sometimes hidden or minimized |
+| 2 | 🟡 | Visible fear of speaking up; blame language in retros or post-mortems; experiments avoided |
+| 1 | 🔴 | Strong blame culture; mistakes punished; dissent suppressed; team tells leadership what it wants to hear |
+
+**What to look for in inputs:** Who speaks in ceremonies, retro tone (blame vs. systems thinking), whether the same issues recur without being named, incident/post-mortem culture, any explicit signals of fear or discomfort.
+
+---
+
+## 4. Process & Practices
+
+What this measures: Whether the team's ceremonies, workflows, and tooling serve the work — rather than existing as overhead.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Ceremonies are purposeful and right-sized; WIP actively managed; workflows clear and followed; tooling supports flow |
+| 4 | 🟢 | Processes generally work; minor inefficiencies; team adapts ceremonies to context |
+| 3 | 🟡 | Some ceremony overhead; WIP discipline breaks down under pressure; workflow steps unclear or inconsistently applied |
+| 2 | 🟡 | Ceremonies feel bureaucratic; WIP out of control; workflows confused or frequently bypassed |
+| 1 | 🔴 | Process provides no value; team ignores or resents it; WIP chaos; no effective workflow |
+
+**What to look for in inputs:** WIP count vs. team size, ceremony duration/outcomes, ticket aging, workflow stage distribution, whether process is adapted or blindly followed.
+
+---
+
+## 5. Continuous Improvement
+
+What this measures: Whether the team actually changes based on retrospectives and feedback — and whether improvement is team-owned vs. externally imposed.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Retro actions consistently implemented; improvement visible across sprints; team experiments with process; owns its way of working |
+| 4 | 🟢 | Most retro actions taken; occasional backsliding; team generally owns its process |
+| 3 | 🟡 | Some actions taken; improvement is patchy; same issues recur; team process ownership is partial |
+| 2 | 🟡 | Retros happen but rarely produce change; same issues for months; improvement feels imposed from outside |
+| 1 | 🔴 | Retros are going through the motions; no visible improvement; team has given up on the process |
+
+**What to look for in inputs:** Whether the same retro themes recur across sessions, ratio of retro actions completed, whether improvement feels organic or mandated, how the team talks about change.
+
+---
+
+## 6. Team Autonomy
+
+What this measures: The degree to which the team can make decisions, own their work, and operate without constant external approval or interference.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Team makes most decisions internally; clear mandate; few external blockers; leadership trusts and enables |
+| 4 | 🟢 | Generally autonomous; occasional escalations; mandate mostly clear |
+| 3 | 🟡 | Frequent escalations; some external blockers slowing delivery; mandate unclear in places |
+| 2 | 🟡 | Team regularly blocked by external dependencies or approvals; low decision-making authority |
+| 1 | 🔴 | Team can't make meaningful decisions; micromanagement evident; external blockers chronic; mandate absent |
+
+**What to look for in inputs:** How often tickets are blocked by external teams/approvals, whether the team designs its own process or has it dictated, escalation frequency, how the team talks about management.
+
+---
+
+## 7. Customer Focus
+
+What this measures: How connected the team is to the people they build for, and whether they measure outcomes rather than just outputs.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Team understands their users deeply; tracks outcome metrics; regular customer contact; decisions tied to user value |
+| 4 | 🟢 | Good customer understanding; some outcome tracking; customer feedback loops in place |
+| 3 | 🟡 | Customer connection is sporadic; more focused on output than outcomes; user feedback exists but isn't acted on consistently |
+| 2 | 🟡 | Team builds without regular customer input; success measured in features shipped, not value delivered |
+| 1 | 🔴 | Team has no meaningful connection to customers; no outcome metrics; shipping into the void |
+
+**What to look for in inputs:** Whether sprint goals reference user outcomes or just features, whether customer feedback appears in retros, whether team can articulate who they're building for and why it matters.
+
+---
+
+## 8. Technical Health
+
+What this measures: The state of the codebase, infrastructure, and engineering practices that determine the team's ability to move safely and sustainably.
+
+| Score | RAG | Indicators |
+|-------|-----|------------|
+| 5 | 🟢 | Clean codebase; manageable debt; strong test coverage; automated deployments; fast feedback loops; team can refactor safely |
+| 4 | 🟢 | Generally healthy; some debt but managed; good test coverage; deployments mostly smooth |
+| 3 | 🟡 | Noticeable debt; test coverage gaps; deployments occasionally painful; some fear of changing certain areas |
+| 2 | 🟡 | Significant debt burden; fragile areas; low test confidence; slow or risky deployments |
+| 1 | 🔴 | System is a liability; debt actively blocks delivery; deployments are events (not routines); bus factor of 1 for critical systems |
+
+**What to look for in inputs:** Test coverage trends, deployment frequency, incident rate, time spent on debt vs. features, bus factor signals, PR complexity or merge conflict frequency, how team talks about the codebase.
