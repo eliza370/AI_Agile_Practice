@@ -1,6 +1,6 @@
 # AI_Agile_Practice
 
-This repository is a working toolkit for agile coaches and Scrum Masters who want to use AI as a diagnostic instrument — not a shortcut. The materials here treat AI as a way to surface patterns in real team data that would otherwise take hours to notice, or never get noticed at all.
+This repository is a working toolkit for agile coaches and Scrum Masters who want to use AI as a diagnostic instrument — not a shortcut. The sample materials here treat AI as a way to surface patterns in real team data that would otherwise take hours to notice, or never get noticed at all.
 
 The underlying philosophy is simple: AI amplifies human judgment. It doesn't replace the coach.
 
@@ -8,7 +8,7 @@ The underlying philosophy is simple: AI amplifies human judgment. It doesn't rep
 
 ## What This Is
 
-A practitioner's working library of AI-assisted agile tools, built and used in real team contexts.
+A practitioner's sample library of AI-assisted agile tools, built and used in real team contexts.
 
 The current focus is on **pattern detection across team artifacts** — the kind of analysis that becomes possible when you stop reading sprint exports one at a time and start asking what the last six sprints are actually telling you.
 
